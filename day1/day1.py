@@ -1,10 +1,9 @@
 """
 2021 Advent of Code: Day 1
 """
-DATA_PATH = '/home/bturnip/Documents/Code/python/advent_of_code/2021/day1/'
-DATA_FILE = 'day1_input.txt'
-INPUT_FILE = f"{DATA_PATH}{DATA_FILE}"
-
+import sys
+sys.path.append('/home/bturnip/Documents/Code/python/advent_of_code/AdventOfCode2021/')
+from advent_tools import *
 
 def create_windowed_list(input_list,chunk_size):
     """
@@ -23,10 +22,11 @@ def create_windowed_list(input_list,chunk_size):
     i = 0
     last_index = chunk_size
     max_index = len(input_list)
+    int_list = list(map(int,input_list))
     output_list = []
 
     while last_index <= max_index:
-        output_list.append( sum(input_list[i:last_index]) )
+        output_list.append( sum(int_list[i:last_index]) )
         #print(f'i:{i},last_index:{last_index}, elements: {input_list[i:last_index]}')
         i+=1
         last_index +=1
@@ -50,11 +50,3 @@ def count_depth_increases(input_list):
         i += 1
 
     return increase_count
-
-def load_input_file_into_list(input_file):
-    """ Loads input file into a list and returns list"""
-    with open(input_file,'r') as f:
-        raw_load = f.readlines()
-        list_result = list(map(int,raw_load))
-
-    return list_result

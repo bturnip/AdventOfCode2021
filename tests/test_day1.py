@@ -2,7 +2,11 @@
 Test Cases for Day1
 """
 from unittest import TestCase
-from day1.day1 import *
+
+import sys
+sys.path.append('/home/bturnip/Documents/Code/python/advent_of_code/AdventOfCode2021/day1')
+from day1 import *
+
 
 class testDay1(TestCase):
     """ Test Cases for Day 1 Advent of Code """
@@ -35,26 +39,15 @@ class testDay1(TestCase):
         expected_count = 0
         actual_count = count_depth_increases(bar)
         self.assertEqual(expected_count, actual_count)
-        
+
         baz = [1,0,1,2]
         expected_count = 2
         actual_count = count_depth_increases(baz)
-        self.assertEqual(expected_count, actual_count)        
+        self.assertEqual(expected_count, actual_count)
 
         qux = [1,1,2,0]
         expected_count = 1
         actual_count = count_depth_increases(qux)
-        self.assertEqual(expected_count, actual_count)        
-
-    def test_load_input_file_into_list(self):
-        """ Test input file load """
-        INPUT_FILE = f"{DATA_PATH}{DATA_FILE}"
-        self.assertEqual(INPUT_FILE,"/home/bturnip/Documents/Code/python/advent_of_code/2021/day1/day1_input.txt")
-        
-        expected_line_count = 2000
-        actual_line_count = len(load_input_file_into_list(INPUT_FILE))
-        self.assertEqual(expected_line_count, actual_line_count)
-        
-        
+        self.assertEqual(expected_count, actual_count)
 
 
