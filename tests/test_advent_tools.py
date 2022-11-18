@@ -9,8 +9,8 @@ sys.path.append('/home/bturnip/Documents/Code/python/advent_of_code/AdventOfCode
 from advent_tools import *
 
 
-class testDay2(TestCase):
-    """ Test Cases for Day 2 Advent of Code """
+class testAdventTools(TestCase):
+    """ Test Cases for Advent Tools """
     def test_test(self):
         """ Dummy Test to test nosetests"""
         self.assertEqual(1,1)
@@ -88,7 +88,6 @@ class testDay2(TestCase):
 
     def test_file_load_with_strip_newline(self):
         """ Test load_input_file_into_list() with strip_newline option """
-
         this_file = get_input_file_name(day=3)
 
         # first confirm that file load will have newlines
