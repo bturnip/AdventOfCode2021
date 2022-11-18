@@ -82,16 +82,28 @@ class testDay2(TestCase):
         """ Test intify_list with bad input"""
         foo = {}
         self.assertRaises(TypeError, intify_list, foo)
-        
+
         bar =['x',1, '3']
         self.assertRaises(ValueError, intify_list, bar)
-        
-        
-        
-        
 
+    def test_file_load_with_strip_newline(self):
+        """ Test load_input_file_into_list() with strip_newline option """
 
-    
+        this_file = get_input_file_name(day=3)
 
-    
-        
+        # first confirm that file load will have newlines
+        foo = load_input_file_into_list(this_file)
+        try:
+            newline_found = next(x for x in foo if '\n' in x)
+        except StopIteration:
+            newline_found = None
+
+        self.assertIsNotNone(newline_found)
+
+        bar = load_input_file_into_list(this_file,strip_newline=True)
+        try:
+            newline_found = next(x for x in bar if '\n' in x)
+        except StopIteration:
+            newline_found = None
+
+        self.assertIsNone(newline_found)

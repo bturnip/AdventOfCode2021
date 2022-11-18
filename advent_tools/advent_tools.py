@@ -17,7 +17,7 @@ def get_file_linecount(this_file):
     """ returns line count of file """
     return sum(1 for _ in open(this_file))
 
-def load_input_file_into_list(this_file):
+def load_input_file_into_list(this_file,strip_newline=False):
     """ Loads input file into a list and returns list"""
     # get line count
     line_count = get_file_linecount(this_file)
@@ -30,13 +30,16 @@ def load_input_file_into_list(this_file):
         #list_result = list(map(int,raw_load))
 
     # check that the list and the line count match
-    #line_count = 100
     if line_count != len(raw_load):
         err_mssg = (f"\n+++ERROR: file: [{this_file}] linecount [{line_count}]"\
                     f" does not match loaded list length [{len(raw_load)}]")
         raise ValueError(err_mssg)
 
-    return raw_load
+    if strip_newline:
+        print(f"+++ File load: stripping newlines from entries...")
+        return [x.rstrip() for x in raw_load]
+    else:
+        return raw_load
 
 def intify_list(input_list):
     """ Takes a list and returns that list with all elements cast to int """
