@@ -1,5 +1,5 @@
 """
-Test Cases for Day2
+Test Cases for advent_tools module
 """
 from unittest import TestCase
 import unittest.mock as u
@@ -70,3 +70,28 @@ class testDay2(TestCase):
         this_file = get_input_file_name(day=2)
         with u.patch('advent_tools.get_file_linecount', return_value=12345) as mocked_count:
             self.assertRaises(ValueError, load_input_file_into_list, this_file)
+
+    def test_intify_list(self):
+        """ Test intify_list with known data"""
+        foo = ["1","2",'3']
+        expected_result = [1,2,3]
+        bar = intify_list(foo)
+        self.assertEqual(bar, expected_result)
+
+    def test_intify_list_bad_input(self):
+        """ Test intify_list with bad input"""
+        foo = {}
+        self.assertRaises(TypeError, intify_list, foo)
+        
+        bar =['x',1, '3']
+        self.assertRaises(ValueError, intify_list, bar)
+        
+        
+        
+        
+
+
+    
+
+    
+        
