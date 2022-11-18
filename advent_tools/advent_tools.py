@@ -25,15 +25,27 @@ def load_input_file_into_list(this_file):
         return []
 
     # load file
-    with open(this_file,'r') as f:
-        raw_load = f.readlines()
+    with open(this_file,'r') as file_stream:
+        raw_load = file_stream.readlines()
         #list_result = list(map(int,raw_load))
 
     # check that the list and the line count match
     #line_count = 100
     if line_count != len(raw_load):
-        err_mssg = (f"\n+++ ERROR: file: [{this_file}] linecount [{line_count}]"\
+        err_mssg = (f"\n+++ERROR: file: [{this_file}] linecount [{line_count}]"\
                     f" does not match loaded list length [{len(raw_load)}]")
         raise ValueError(err_mssg)
 
     return raw_load
+
+def intify_list(input_list):
+    """ Takes a list and returns that list with all elements cast to int """
+    if type(input_list) != list:
+        err_mssg = (f"+++ERROR: input parameter {input_list} " \
+                    f"+++ERROR: is not of type list")
+        raise TypeError(err_mssg)
+
+    return list(map(int,input_list))
+    
+    
+    
