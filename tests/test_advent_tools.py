@@ -7,6 +7,7 @@ import unittest.mock as u
 import sys
 sys.path.append('/home/bturnip/Documents/Code/python/advent_of_code/AdventOfCode2021/advent_tools')
 from advent_tools import *
+import numpy as np
 
 
 class testAdventTools(TestCase):
@@ -139,6 +140,28 @@ class testAdventTools(TestCase):
         good_inputs = {'110':6, '001100001011':779 , '110011110100':3316}
         for k in good_inputs:
             self.assertEqual(good_inputs[k],bin_str_to_int(k))
-
-
+            
+    def test_check_np_array_values(self):
+        """ test check_np_array_values()"""
+        foo = np.array([[1,0,1,1],[1,1,0,0],[0,0,1,0]])
+        valid_values = [0,1]
         
+        empty_foo = np.array([])
+        empty_values = []
+        
+        bad_foo = np.array([[2,0,1,1],[1,1,0,0],[0,0,1,0]])
+        bad_values = [1,2]
+        
+        wrong_foo = "I'm a string instead of getting numpy!"
+        wrong_values = "valid values"
+        
+        # Check for empty input or wrong types
+        self.assertRaises(ValueError,check_np_array_values,foo,empty_values)
+        self.assertRaises(ValueError,check_np_array_values,empty_foo,valid_values)
+        
+        self.assertRaises(TypeError,check_np_array_values,foo,wrong_values)
+        self.assertRaises(TypeError,check_np_array_values,wrong_foo,valid_values)
+        
+        
+        self.assertTrue(check_np_array_values(foo,valid_values))
+        self.assertFalse(check_np_array_values(bad_foo,valid_values))
