@@ -1,6 +1,9 @@
 """
 Test Cases for advent_tools module
 """
+# suppress specific pylint checks (http://pylint-messages.wikidot.com/all-codes)
+# pylint: disable=C0104, E0602
+
 from unittest import TestCase
 import unittest.mock as u
 
@@ -10,7 +13,7 @@ from advent_tools import *
 import numpy as np
 
 
-class testAdventTools(TestCase):
+class TestAdventTools(TestCase):
     """ Test Cases for Advent Tools """
     def test_test(self):
         """ Dummy Test to test nosetests"""
@@ -116,7 +119,7 @@ class testAdventTools(TestCase):
 
         empty_foo = []
         empty_bar ={}
-        
+
         missing_bar = {"a":1,"c":3}
 
         self.assertRaises(TypeError,check_dict_keys, bad_foo, bar)
@@ -124,7 +127,7 @@ class testAdventTools(TestCase):
         self.assertRaises(ValueError,check_dict_keys,empty_foo, bar)
         self.assertRaises(ValueError,check_dict_keys,foo,empty_bar)
         self.assertFalse(check_dict_keys(foo, missing_bar))
-    
+
     def test_check_dict_keys(self):
         """ Test check_dict_keys with known data """
         foo = ["a","b"]
@@ -136,32 +139,54 @@ class testAdventTools(TestCase):
         bad_inputs = [11,{'10101'},'123','']
         for b in bad_inputs:
             self.assertRaises(ValueError,bin_str_to_int, b)
-        
+
         good_inputs = {'110':6, '001100001011':779 , '110011110100':3316}
         for k in good_inputs:
             self.assertEqual(good_inputs[k],bin_str_to_int(k))
-            
+
     def test_check_np_array_values(self):
         """ test check_np_array_values()"""
         foo = np.array([[1,0,1,1],[1,1,0,0],[0,0,1,0]])
         valid_values = [0,1]
-        
+
         empty_foo = np.array([])
         empty_values = []
-        
+
         bad_foo = np.array([[2,0,1,1],[1,1,0,0],[0,0,1,0]])
-        bad_values = [1,2]
-        
+
         wrong_foo = "I'm a string instead of getting numpy!"
         wrong_values = "valid values"
-        
+
+        single_row_foo = np.array([1,1,0,0,1,1])
+
         # Check for empty input or wrong types
         self.assertRaises(ValueError,check_np_array_values,foo,empty_values)
         self.assertRaises(ValueError,check_np_array_values,empty_foo,valid_values)
-        
         self.assertRaises(TypeError,check_np_array_values,foo,wrong_values)
         self.assertRaises(TypeError,check_np_array_values,wrong_foo,valid_values)
-        
-        
+
+        # Check return values
         self.assertTrue(check_np_array_values(foo,valid_values))
         self.assertFalse(check_np_array_values(bad_foo,valid_values))
+        self.assertTrue(check_np_array_values(single_row_foo,valid_values))
+
+    def test_binary_frequency_select(self):
+        """ test binary_frequency_select() """
+        bad_type_foo = "I'm a string instead of getting numpy!"
+        empty_foo = np.array([])
+        bad_data_foo = np.array([1,0,1,2])
+
+        # test sanity checks
+        self.assertRaises(ValueError,binary_frequency_select,bad_type_foo)
+        self.assertRaises(ValueError,binary_frequency_select,empty_foo)
+        self.assertRaises(ValueError,binary_frequency_select,bad_data_foo)
+
+        #test return values
+        foo_pick_one_pt1 = np.array([1,0,1,1])
+        foo_pick_one_pt2 = np.array([1,1,0,0])
+        foo_pick_zero = np.array([0,1,0,0])
+
+        self.assertEqual(1,binary_frequency_select(foo_pick_one_pt1))
+        self.assertEqual(1,binary_frequency_select(foo_pick_one_pt2))
+        self.assertEqual(0,binary_frequency_select(foo_pick_zero))
+
