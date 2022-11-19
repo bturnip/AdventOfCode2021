@@ -15,9 +15,7 @@ class testAdventTools(TestCase):
         """ Dummy Test to test nosetests"""
         self.assertEqual(1,1)
 
-    # NB: these test cases are testing code that was moved to the
-    # NB: advent_tools module, since they are likely to be used in
-    # NB: following day's puzzles
+
     def test_get_input_file_name(self):
         """ Test automated file name generation"""
         expected_file_name = ("/home/bturnip/Documents/Code/python/"\
@@ -131,3 +129,16 @@ class testAdventTools(TestCase):
         foo = ["a","b"]
         bar = {"a":1,"b":2}
         self.assertTrue(check_dict_keys(foo,bar))
+
+    def test_bin_str_to_int(self):
+        """ Test bin_str_to_int() """
+        bad_inputs = [11,{'10101'},'123','']
+        for b in bad_inputs:
+            self.assertRaises(ValueError,bin_str_to_int, b)
+        
+        good_inputs = {'110':6, '001100001011':779 , '110011110100':3316}
+        for k in good_inputs:
+            self.assertEqual(good_inputs[k],bin_str_to_int(k))
+
+
+        

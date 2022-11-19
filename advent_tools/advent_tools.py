@@ -71,6 +71,19 @@ def check_dict_keys(key_list, dict_to_check):
              return False
     
     return True
+
+def bin_str_to_int(binary_str):
+    """ Takes a str that looks like a binary number and returns int """
+    err_mssg = "+++ERROR: bin_str_to_int() input must be "\
+               "a string with only '1' and '0' chars."
+    # sanity checks
+    if (type(binary_str) != str) \
+       or (len(binary_str) <  1) \
+       or (len(binary_str.replace('1','').replace('0','')) > 0):
+           raise ValueError(err_mssg)
+    
+    return int(binary_str,base=2)
+
  
     
     
