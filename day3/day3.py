@@ -20,7 +20,7 @@ def create_2D_numpy_array(input_data):
     return string_arr.astype(int)
 
 
-def calculate_gamma_and_espilon_rate(input_data):
+def calculate_aoc_day3(input_data):
     """ Calculate the gamma and espilon rate, returned in a dict """
 
     """
@@ -42,7 +42,7 @@ def calculate_gamma_and_espilon_rate(input_data):
 
     # sanity checks
     if (type(input_data) != np.ndarray or input_data.size <= 0 ):
-        err_mssg = "input to calculate_gamma_and_espilon_rate() must " \
+        err_mssg = "input to calculate_aoc_day3() must " \
                    "be a numpy arrray with size > 0"
         raise ValueError(err_mssg)
 

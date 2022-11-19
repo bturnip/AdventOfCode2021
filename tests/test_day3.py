@@ -31,43 +31,43 @@ class testDay3(TestCase):
         self.assertIsInstance(bar,np.ndarray)
         self.assertEqual(expected_shape, bar.shape)
 
-    def test_calculate_gamma_and_espilon_rate_bad_data(self):
-        """ Test calculate_gamma_and_espilon_rate() with bad data"""
+    def test_calculate_aoc_day3_bad_data(self):
+        """ Test calculate_aoc_day3() with bad data"""
         # send a 2d list instead of numpy array
         foo = [[x] for x in range(10)]
-        self.assertRaises(ValueError,calculate_gamma_and_espilon_rate,foo)
+        self.assertRaises(ValueError,calculate_aoc_day3,foo)
 
         bar = np.array([])
-        self.assertRaises(ValueError,calculate_gamma_and_espilon_rate,bar)
+        self.assertRaises(ValueError,calculate_aoc_day3,bar)
 
-    def test_calculate_gamma_and_espilon_rate_gamma_only(self):
+    def test_calculate_aoc_day3_gamma_only(self):
         """ Test gamma rate calculation only """
         foo = ['111','000','110']
         expected_gamma = '110'
         bar = create_2D_numpy_array(foo)
 
-        baz = calculate_gamma_and_espilon_rate(bar)
+        baz = calculate_aoc_day3(bar)
         self.assertEqual(expected_gamma, baz["gamma"])
 
-    def test_calculate_gamma_and_espilon_rate(self):
+    def test_calculate_aoc_day3(self):
         """ Test gamma and epsilon rate calculation """
         foo = ['111','000','110']
         expected_gamma = '110'
         expected_epsilon = '001'
         bar = create_2D_numpy_array(foo)
 
-        baz = calculate_gamma_and_espilon_rate(bar)
+        baz = calculate_aoc_day3(bar)
         self.assertEqual(expected_gamma, baz["gamma"])
         self.assertEqual(expected_epsilon,baz["epsilon"])
 
-    def test_calculate_gamma_and_espilon_rate_binary_conversion(self):
+    def test_calculate_aoc_day3_binary_conversion(self):
         """ Test conversion of binary rates to ints"""
         foo = ['111','000','110']
         expected_gamma = 6   #'110'
         expected_epsilon = 1 #'001'
 
         bar = create_2D_numpy_array(foo)
-        baz = calculate_gamma_and_espilon_rate(bar)
+        baz = calculate_aoc_day3(bar)
         self.assertEqual(expected_gamma, baz["gamma_int"])
         self.assertEqual(expected_epsilon,baz["epsilon_int"])
 
@@ -79,7 +79,7 @@ class testDay3(TestCase):
         expected_power_consumption = 6 #(6*1 = 6)
 
         bar = create_2D_numpy_array(foo)
-        baz = calculate_gamma_and_espilon_rate(bar)
+        baz = calculate_aoc_day3(bar)
         self.assertEqual(expected_power_consumption, baz["power_consumption"])
 
     def test_calculate_power_consumption_bad_input(self):

@@ -6,6 +6,7 @@ from advent_tools import *
 from day3 import *
 import numpy as np
 
+
 # load file -----------------------------------------------------------
 this_file = get_input_file_name(day=3)
 this_data = load_input_file_into_list(this_file, strip_newline = True)
@@ -15,8 +16,7 @@ this_data = load_input_file_into_list(this_file, strip_newline = True)
 this_arr = create_2D_numpy_array(this_data)
 
 # run calculations -----------------------------------------------------
-results = calculate_gamma_and_espilon_rate(this_arr)
-
+results = calculate_aoc_day3(this_arr)
 
 gamma = results['gamma']
 epsilon = results['epsilon']
@@ -26,3 +26,5 @@ power_consumption = results['power_consumption']
 print(f"+++ RESULTS:")
 for k in results:
     print(f"{k}:{results[k]}")
+    
+# scratch --------------------------------------------------------------
