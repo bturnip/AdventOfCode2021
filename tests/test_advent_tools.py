@@ -106,3 +106,28 @@ class testAdventTools(TestCase):
             newline_found = None
 
         self.assertIsNone(newline_found)
+
+    def test_check_dict_keys_bad_input(self):
+        """ Test check_dict_keys() with bad input """
+        foo = ["a","b"]
+        bar = {"a":1,"b":2}
+
+        bad_foo = "I'm a string instead of a list"
+        bad_bar = "I'm  string instead of a dict"
+
+        empty_foo = []
+        empty_bar ={}
+        
+        missing_bar = {"a":1,"c":3}
+
+        self.assertRaises(TypeError,check_dict_keys, bad_foo, bar)
+        self.assertRaises(TypeError,check_dict_keys, foo, bad_bar)
+        self.assertRaises(ValueError,check_dict_keys,empty_foo, bar)
+        self.assertRaises(ValueError,check_dict_keys,foo,empty_bar)
+        self.assertFalse(check_dict_keys(foo, missing_bar))
+    
+    def test_check_dict_keys(self):
+        """ Test check_dict_keys with known data """
+        foo = ["a","b"]
+        bar = {"a":1,"b":2}
+        self.assertTrue(check_dict_keys(foo,bar))

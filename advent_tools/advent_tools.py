@@ -50,5 +50,28 @@ def intify_list(input_list):
 
     return list(map(int,input_list))
     
+def check_dict_keys(key_list, dict_to_check):
+    """ Takes a key list and checks dict that all keys exist"""
+    # sanity checks 
+    if type(key_list) != list:
+        raise TypeError()
+    if type(dict_to_check) != dict:
+        raise TypeError()
+    if len(key_list) == 0:
+        err_mssg = "+++ERROR: key_list cannot be empty"
+        raise ValueError(err_mssg)
+    if len(dict_to_check) == 0:
+        err_mssg = "+++ERROR: dict_to_check cannot be empty"
+        raise ValueError(err_mssg)
+
+    for this_key in key_list:
+         if this_key not in dict_to_check:
+             err_mssg = f"+++ERROR: {this_key} not found in dict"
+             print(err_mssg)
+             return False
+    
+    return True
+ 
+    
     
     
