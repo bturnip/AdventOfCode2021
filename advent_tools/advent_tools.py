@@ -2,7 +2,7 @@
 2021 Advent of Code: Common tools
 
 """
-# suppress specific pylint checks
+# suppress specific pylint checks (http://pylint-messages.wikidot.com/all-codes)
 # pylint: disable=C0123, R1705
 
 import numpy as np
@@ -102,9 +102,19 @@ def check_np_array_values(this_arr, valid_values):
 
     # check data, return True if everything is ok, False otherwise
     # get arr stats
-    num_rows, num_cols = this_arr.shape
+    if this_arr.ndim == 1:
+        is_single_row = True
+        num_rows = 1
+    else:
+        is_single_row = False
+        num_rows = this_arr.shape[0]
+
     for r in range(num_rows):
-        this_row = this_arr[r]
+        if is_single_row:
+            this_row = this_arr
+        else:
+            this_row = this_arr[r]
+
         filter_arr = this_row[np.in1d(this_row, valid_values)]
 
         if len(this_row) != len(filter_arr):
@@ -113,3 +123,27 @@ def check_np_array_values(this_arr, valid_values):
                    f"...stopping at first error.")
             return False
     return True
+
+def binary_frequency_select(input_arr):
+    """ takes an array of 1's and 0's, returns val with highest frequency """
+    # sanity checks
+    if(type(input_arr) != np.ndarray) \
+        or (input_arr.size <= 0):
+        err_mssg = "+++ERROR: input to binary_frequency_select() " \
+                   "must be a numpy arrray with size > 0"
+        raise ValueError(err_mssg)
+
+    value_check_passes = check_np_array_values(input_arr,[0,1])
+
+    if value_check_passes is False:
+        err_mssg = "+++ERROR: only values in [0,1] allowed in input array"
+        raise ValueError(err_mssg)
+
+    freq = np.bincount(input_arr)
+    # numpy rounds 0.5 --> to 0.0, so we need to check the value directly
+    decimal_result = freq[1]/input_arr.size
+    if decimal_result >= 0.5:
+        return 1
+    else:
+        return 0
+
