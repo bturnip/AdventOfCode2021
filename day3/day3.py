@@ -1,6 +1,8 @@
 """
 2021 Advent of Code: Day 2
 """
+# suppress specific pylint checks (http://pylint-messages.wikidot.com/all-codes)
+# pylint: disable=C0104, C0123, C0413, E0602
 import sys
 sys.path.append('/home/bturnip/Documents/Code/python/advent_of_code/AdventOfCode2021/advent_tools')
 from advent_tools import *
@@ -19,26 +21,24 @@ def create_2D_numpy_array(input_data):
     string_arr = np.array([list(x) for x in input_data])
     return string_arr.astype(int)
 
-
 def calculate_aoc_day3(input_data):
-    """ Calculate the gamma and espilon rate, returned in a dict """
+    """ Calculate the gamma, espilon, power_consumption rates """
 
-    """
-    Calculation method for gamma:
-      - Input is a list of binary numbers.  To help with calculations,
-        the list is loaded into a 2D numpy array.
-      - For each column, count the number of 0's and 1's
-      - Which ever value has a higher count becomes the value for that
-        "bit" in the array
-      - To quickly find this, sum each column, then divide the total by
-        the number of rows in the array.  For any result > 0.5, there are
-        more 1's in the column.  Since the values will range stricty
-        between 0.0 and 1.0, we can round the result to get to the final
-        answer for each column
-    Calculation methond for epsilon:
-      - Epsilon rate is inverse of gamma rate.  If gamma_rate = "1001",
-        epsilon rate = "0110"
-    """
+    # Calculation method for gamma:
+    #   - Input is a list of binary numbers.  To help with calculations,
+    #     the list is loaded into a 2D numpy array.
+    #   - For each column, count the number of 0's and 1's
+    #   - Which ever value has a higher count becomes the value for that
+    #     "bit" in the array
+    #   - To quickly find this, sum each column, then divide the total by
+    #     the number of rows in the array.  For any result > 0.5, there are
+    #     more 1's in the column.  Since the values will range stricty
+    #     between 0.0 and 1.0, we can round the result to get to the final
+    #     answer for each column
+    # Calculation methond for epsilon:
+    #   - Epsilon rate is inverse of gamma rate.  If gamma_rate = "1001",
+    #     epsilon rate = "0110"
+
 
     # sanity checks
     if (type(input_data) != np.ndarray or input_data.size <= 0 ):
@@ -46,26 +46,29 @@ def calculate_aoc_day3(input_data):
                    "be a numpy arrray with size > 0"
         raise ValueError(err_mssg)
 
+    if check_np_array_values(input_data,[0,1]) is False:
+        err_mssg = "+++ERROR: only values in [0,1] allowed in input array"
+        raise ValueError(err_mssg)
+
     # initialize results dict
-    rate_dict = {"gamma":"0", "epsilon":"0"}
+    submarine_status_dict = {"gamma":"0", "epsilon":"0"}
 
     # get array stats
     num_rows, num_cols = input_data.shape
 
     # calculate the final bits -----------------------------------------
-    """
-    Gamma rate steps:
-      - Add up the columns sums
-      - Divide the sums by the rowcount, rounding to 0 or 1
-      - Cast results into a python list of strings
-      - Coalesce values into single string, one bit per column
-    Epsilon rate steps:
-      - Invert the bits of the gamma rate
-    Power consumption:
-      - Convert the binary values of gamma and epsilon to ints
-      - Multiply the int values together
-      - Result is power consumption
-    """
+    # Gamma rate steps:
+    #   - Add up the columns sums
+    #   - Divide the sums by the rowcount, rounding to 0 or 1
+    #   - Cast results into a python list of strings
+    #   - Coalesce values into single string, one bit per column
+    # Epsilon rate steps:
+    #   - Invert the bits of the gamma rate
+    # Power consumption:
+    #   - Convert the binary values of gamma and epsilon to ints
+    #   - Multiply the int values together
+    #   - Result is power consumption
+
     arr_sums = np.array(np.sum(input_data, axis = 0))
     arr_calc = np.around(arr_sums/num_rows)
 
@@ -84,13 +87,72 @@ def calculate_aoc_day3(input_data):
     power_consumption = gamma_int * epsilon_int
 
     # update the results_dict ------------------------------------------
-    rate_dict["gamma"] = gamma_rate
-    rate_dict["epsilon"] = epsilon_rate
-    rate_dict["gamma_int"] = gamma_int
-    rate_dict["epsilon_int"] = epsilon_int
-    rate_dict["power_consumption"] = power_consumption
+    submarine_status_dict["gamma"] = gamma_rate
+    submarine_status_dict["epsilon"] = epsilon_rate
+    submarine_status_dict["gamma_int"] = gamma_int
+    submarine_status_dict["epsilon_int"] = epsilon_int
+    submarine_status_dict["power_consumption"] = power_consumption
     # return results ---------------------------------------------------
-    return rate_dict
+    return submarine_status_dict
+
+def calculate_aoc_day3_pt2(input_data,status_dict ):
+    """ Calculate the oxygen_generator, co2_scrubber, life_support rates """
+    # Function will add entries to status_dict for:
+    #   - oxygen_generator
+    #   - oxygen_generator_int
+    #   - co2_scrubber
+    #   - co2_scrubber_int
+    #   - life_support
+    # Calculation method for oxygen_generator:
+    #   - For the 1st column/bit, determine frequency of the 1 0 values.
+    #     Whichever value is higher (1's win tiebreaker), keep those rows
+    #     and remove the rest from consideration.
+    #   - Repeat this process with the nth column/bit, reducing the number
+    #     of rows until there is only one left.
+    #   - Convert the remaining item into an int for the final value.
+    # Calculation method for co2_scrubber:
+    #   - Repeat the steps for oxygen_generator, keeping the values with
+    #     the digit that has the lower frequency for each position until
+    #     there is only one left.
+    #   - Convert binary digit to int
+    # Calculation for life_support:
+    #   - multiply the int values of oxygen_generator and co2_scrubber
+    # """
+
+    if (type(input_data) != np.ndarray or input_data.size <= 0 ):
+        err_mssg = "input to calculate_aoc_day3() must " \
+                   "be a numpy arrray with size > 0"
+        raise ValueError(err_mssg)
+
+    if check_np_array_values(input_data,[0,1]) is False:
+        err_mssg = "+++ERROR: only values in [0,1] allowed in input array"
+        raise ValueError(err_mssg)
+
+    # oxygen_generator
+    # get array stats
+    oxy_gen = input_data.copy()
+    num_cols = oxy_gen.shape[1]
+
+    for c in range(num_cols):
+        if len(oxy_gen) == 1:
+            print(f"+++RESULTS:final answer found in {c} bits: {oxy_gen}")
+            break
+
+        test_col = oxy_gen[:,c]
+        keep_bit = binary_frequency_select(test_col)
+
+        # filter rows where bit #{c} matches keep_bit
+        filter_arr = oxy_gen[:,c] == keep_bit
+        oxy_gen=oxy_gen[filter_arr]
+
+    # format oxygen result, store in status dict
+    oxy_value = list(oxy_gen[0].astype(int).astype(str))
+    oxygen_generation = ''.join(oxy_value)
+    oxygen_generation_int = int(oxygen_generation, base=2)
+
+    status_dict["oxygen_generation"]=oxygen_generation
+    status_dict["oxygen_generation_int"]=oxygen_generation_int
+    return status_dict
 
 def calculate_power_consumption(input_dict):
     """ Calculate power consumptions using gamma and epsilon """
@@ -105,14 +167,11 @@ def calculate_power_consumption(input_dict):
     required_keys = ["gamma","epsilon"]
     keys_present = check_dict_keys(required_keys,input_dict)
 
-    if keys_present== False:
-        err_mssg = f"+++ERROR: input dict missing at least one of" \
-                    " the required keys: {required_keys}"
+    if keys_present is False:
+        err_mssg = "+++ERROR: input dict missing at least one of" \
+                   " the required keys: {required_keys}"
         raise ValueError(err_mssg)
 
-    gamma = input_dict["gamma"]
-    epsilon = input_dict["epsilon"]
-    return
-
-
-
+    #gamma = input_dict["gamma"]
+    #epsilon = input_dict["epsilon"]
+    return 0
