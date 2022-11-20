@@ -175,11 +175,13 @@ class TestAdventTools(TestCase):
         bad_type_foo = "I'm a string instead of getting numpy!"
         empty_foo = np.array([])
         bad_data_foo = np.array([1,0,1,2])
+        foo_in_2d = np.array([[1,0,1],[1,1,0]])
 
         # test sanity checks
         self.assertRaises(ValueError,binary_frequency_select,bad_type_foo)
         self.assertRaises(ValueError,binary_frequency_select,empty_foo)
         self.assertRaises(ValueError,binary_frequency_select,bad_data_foo)
+        self.assertRaises(ValueError,binary_frequency_select,foo_in_2d)
 
         #test return values
         foo_pick_one_pt1 = np.array([1,0,1,1])

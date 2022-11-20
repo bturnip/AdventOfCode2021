@@ -132,6 +132,8 @@ def binary_frequency_select(input_arr):
         err_mssg = "+++ERROR: input to binary_frequency_select() " \
                    "must be a numpy arrray with size > 0"
         raise ValueError(err_mssg)
+    if input_arr.ndim > 1:
+        err_mssg = "+++ERROR: input array can only have 1 dimension.)"
 
     value_check_passes = check_np_array_values(input_arr,[0,1])
 
