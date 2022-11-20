@@ -187,8 +187,10 @@ class TestAdventTools(TestCase):
         foo_pick_one_pt1 = np.array([1,0,1,1])
         foo_pick_one_pt2 = np.array([1,1,0,0])
         foo_pick_zero = np.array([0,1,0,0])
+        foo_pick_zero_all_0 = np.array([0,0,0,0])
 
         self.assertEqual(1,binary_frequency_select(foo_pick_one_pt1))
         self.assertEqual(1,binary_frequency_select(foo_pick_one_pt2))
         self.assertEqual(0,binary_frequency_select(foo_pick_zero))
+        self.assertEqual(0,binary_frequency_select(foo_pick_zero_all_0))
 
