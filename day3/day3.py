@@ -152,6 +152,42 @@ def calculate_aoc_day3_pt2(input_data,status_dict ):
 
     status_dict["oxygen_generation"]=oxygen_generation
     status_dict["oxygen_generation_int"]=oxygen_generation_int
+    
+    # co2_scrubber
+    #-------------------------------------------------------------------
+    # if later puzzles use this method, make it a function and toggle
+    # the ==/!= operators
+    #-------------------------------------------------------------------
+    # get array stats
+    co2_scrubber = input_data.copy()
+    num_cols = co2_scrubber.shape[1]
+
+    for c in range(num_cols):
+        if len(co2_scrubber) == 1:
+            print(f"+++RESULTS:final answer found in {c} bits: {co2_scrubber}")
+            break
+
+        test_col = co2_scrubber[:,c]
+        keep_bit = binary_frequency_select(test_col)
+
+        # filter rows where bit #{c} matches keep_bit
+        filter_arr = co2_scrubber[:,c] != keep_bit
+        co2_scrubber=co2_scrubber[filter_arr]
+
+    # format oxygen result, store in status dict
+    co2_value = list(co2_scrubber[0].astype(int).astype(str))
+    co2_scrubber = ''.join(co2_value)
+    co2_scrubber_int = int(co2_scrubber, base=2)
+
+    status_dict["co2_scrubber"]=co2_scrubber
+    status_dict["co2_scrubber_int"]=co2_scrubber_int 
+    
+    # life support calc
+    status_dict["life_support"] = oxygen_generation_int * co2_scrubber_int
+    
+      
+    
+    
     return status_dict
 
 def calculate_power_consumption(input_dict):

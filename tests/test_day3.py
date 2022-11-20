@@ -1,11 +1,14 @@
 """
 Test Cases for Day3
 """
+# pylint: disable=C0104, E0602
 import sys
+
 sys.path.append('/home/bturnip/Documents/Code/python/advent_of_code/AdventOfCode2021/day3')
-from day3 import *
 from unittest import TestCase
 import numpy as np
+from day3 import *
+
 
 
 class TestDay3(TestCase):
@@ -37,7 +40,7 @@ class TestDay3(TestCase):
         wrong_type_foo = [[x] for x in range(10)]
         empty_foo = np.array([])
         bad_data_foo = np.array([[1,0,1],[1,0,0],[1,0,0],[1,1,9]])
-        
+
         self.assertRaises(ValueError,calculate_aoc_day3,wrong_type_foo)
         self.assertRaises(ValueError,calculate_aoc_day3,empty_foo)
         self.assertRaises(ValueError,calculate_aoc_day3,bad_data_foo)
@@ -106,7 +109,7 @@ class TestDay3(TestCase):
     def test_calculate_power_consumption_dummy(self):
         """ test the stubbed return value for calculate_power_consumption() """
         self.assertEqual(0,calculate_power_consumption({"gamma":1, "epsilon":2}))
-        
+
     def test_calculate_aoc_day3_pt2(self):
         """ Test calculate_aoc_day3_pt2() """
         dummy_dict={}
@@ -121,25 +124,32 @@ class TestDay3(TestCase):
 
     def test_calculate_aoc_day3_pt2_good_data(self):
         """ Test calculate_aoc_day3_pt2() with known data """
-        dummy_dict={} 
+        dummy_dict={}
         expected_oxygen_generation = '110011110011'
         expected_oxygen_generation_int = 3315
-         
+        expected_co2_scrubber = '011011110010'
+        expected_co2_scrubber_int = 1778
+        expected_life_support =  5894070
+
         #set up
         this_file = '/home/bturnip/Documents/Code/python/advent_of_code/AdventOfCode2021/day3/sample3.txt'
         this_data = load_input_file_into_list(this_file, strip_newline = True)
         test_arr = create_2D_numpy_array(this_data)
-        
+
         results_dict = calculate_aoc_day3_pt2(test_arr,dummy_dict)
-        
+
         self.assertIsInstance(results_dict,dict)
         self.assertEqual(expected_oxygen_generation,results_dict["oxygen_generation"])
         self.assertEqual(expected_oxygen_generation_int,results_dict["oxygen_generation_int"])
-        
-        
-        
-        
-        
+        self.assertEqual(expected_co2_scrubber,results_dict["co2_scrubber"])
+        self.assertEqual(expected_co2_scrubber_int,results_dict["co2_scrubber_int"])
+        self.assertEqual(expected_life_support,results_dict["life_support"])
+
+
+
+
+
+
 
 
 
