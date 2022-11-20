@@ -142,10 +142,17 @@ def binary_frequency_select(input_arr):
         raise ValueError(err_mssg)
 
     freq = np.bincount(input_arr)
-    # numpy rounds 0.5 --> to 0.0, so we need to check the value directly
-    decimal_result = freq[1]/input_arr.size
-    if decimal_result >= 0.5:
-        return 1
-    else:
-        return 0
+    # - bincount will return a list with len of 1 or 2
+    # - if result is len(1), it implies that the results were all "0""
+    # - if result is len(2), it implies there are zero or more "0" values
+    #   and at least one "1" value
+    # - NB: numpy rounds down on .5 values, ie. 0.5 --> to 0.0, so we 
+    #   need to check the value directly
+    if len(freq) == 2:
+        decimal_result = freq[1]/input_arr.size
+        if decimal_result >= 0.5:
+            return 1
+        else:
+            return 0
+    return 0
 
