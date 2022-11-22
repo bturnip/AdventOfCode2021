@@ -74,27 +74,47 @@ class Day4(object):
 
     def load_bingo_cards_from_file(self,input_cards):
         """ loads bingo cards from file"""
+        # bingo card lines are rows of number, no commas
+        # assumption is that all bingo cards are square grids, i.e,
+        # 4x4, 5x5, etc.
+        #
+        # When a qualifying line is read:
+        #  - add that line to the bingo card
+        #  - keep adding subsequent lines to the bingo card until the
+        #    len of the bingo card list is the same as the number of
+        #    elements in each line.
+        #
+        # Once the bingo card is the correct size (rows = num of columns):
+        #  - Add the completed card to the deck of cards
+        #  - Clear the existing bingo card and repeat process until the
+        #  - end of the file
+        # --------------------------------------------------------------
         if not isfile(input_cards):
             err_mssg = f"+++ERROR: input file [{input_cards}] is not "\
                        f" a valid file."
             raise TypeError(err_mssg)
 
-        with open(input_cards) as file_stream:
-            full_file = file_stream.readlines()
-            file_stream.close()
+        deck_of_all_bingo_cards = []
+        this_bingo_card = []
 
-        
-        card_started = False
-        card_dimension = 0
-        for this_line in full_file:
-            if (this_line.rstrip() =="" or this_line.find(',') > -1):
-                #print(f"skipping line:{this_line.rstrip()}")
-                pass
-            else:
-                # first card found
-                card_started = True
-                card_line = intify_list(this_line   \
-                                          .rstrip() \
-                                          .split())
-                print(f"+++INFO card line:{card_line}")
+        text_file = open(input_cards)
+        for this_line in text_file:
 
+            line = this_line.rstrip()
+
+            if len(line) > 0 and line.find(',') == -1:
+                add_row =(line.split())
+                this_bingo_card.append(add_row)
+
+                if len(this_bingo_card) == len(add_row):
+                    bingo_card = np.array([this_bingo_card])
+                    deck_of_all_bingo_cards.append(bingo_card)
+                    this_bingo_card = []
+
+        print(f"+++INFO: deck of cards:\n" \
+              f"\ttype: {type(deck_of_all_bingo_cards)}" \
+              f"\tlen: {len(deck_of_all_bingo_cards)} \n" \
+              f"\t1st card:\n\t{deck_of_all_bingo_cards[0]} \n"  \
+              f"\t1st card type:{type(deck_of_all_bingo_cards[0])} ")
+
+        text_file.close()
