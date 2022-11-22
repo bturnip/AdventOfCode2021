@@ -22,7 +22,6 @@ real_input_file = f"{day4_path}/day4_raw_input.txt"
 
 class TestDay4(TestCase):
     """ Test Cases for Day 4 Advent of Code """
-    #global dummy_input_file,real_input_file, dummy_input_draws
 
     def test_test(self):
         """ Dummy Test to test nosetests"""
@@ -40,6 +39,9 @@ class TestDay4(TestCase):
         test03=Day4(real_input_file)
         self.assertIsInstance(test03,object)
         self.assertEqual(real_input_file,test03.input_file)
+        #-------------------------------------
+        test04=Day4(sample_input_file)
+        self.assertEqual(sample_input_draws,test04.bingo_draws)
 
     def test_set_bingo_draws(self):
         """ Test setting the bingo draws """
@@ -87,6 +89,14 @@ class TestDay4(TestCase):
         self.assertRaises(TypeError
                           ,test21.load_bingo_draws_from_file
                           ,dummy_input_file)
+                          
+    def test_load_bingo_cards_from_file(self):
+        """ Test loading bingo_cards from an input file """
+        test30=Day4()
+        self.assertRaises(TypeError
+                          ,test30.load_bingo_cards_from_file
+                          ,dummy_input_file)
+        
         
         
         
