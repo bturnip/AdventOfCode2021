@@ -19,12 +19,14 @@ class Day4(object):
 
         if input_file is not None and isfile(input_file):
             self.bingo_draws = self.load_bingo_draws_from_file(input_file)
+            self.bingo_cards = self.load_bingo_cards_from_file(input_file)
         else:
             self.bingo_draws = []
+            self.bingo_cards = []
 
         self.valid_bingo_draw_keywords = ["random"]
 
-        self.bingo_cards = np.array([[[]]])
+
         self.best_card = 0
 
     def set_bingo_draws(self,input_draws):
@@ -94,7 +96,7 @@ class Day4(object):
                        f" a valid file."
             raise TypeError(err_mssg)
 
-        deck_of_all_bingo_cards = []
+        this_deck = []
         this_bingo_card = []
 
         text_file = open(input_cards)
@@ -107,14 +109,13 @@ class Day4(object):
                 this_bingo_card.append(add_row)
 
                 if len(this_bingo_card) == len(add_row):
-                    bingo_card = np.array([this_bingo_card])
-                    deck_of_all_bingo_cards.append(bingo_card)
+                    this_deck.append(this_bingo_card)
                     this_bingo_card = []
 
-        print(f"+++INFO: deck of cards:\n" \
-              f"\ttype: {type(deck_of_all_bingo_cards)}" \
-              f"\tlen: {len(deck_of_all_bingo_cards)} \n" \
-              f"\t1st card:\n\t{deck_of_all_bingo_cards[0]} \n"  \
-              f"\t1st card type:{type(deck_of_all_bingo_cards[0])} ")
-
         text_file.close()
+
+        # assign deck of cards
+        deck_of_cards = np.array(this_deck)
+        self.bingo_cards = deck_of_cards
+
+        return deck_of_cards

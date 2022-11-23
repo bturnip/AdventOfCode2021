@@ -3,8 +3,9 @@ Test Cases for Day4
 """
 # pylint: disable=C0104, E0602, W0602
 from unittest import TestCase
-import numpy as np
 import sys
+import numpy as np
+
 sys.path.append('/home/bturnip/Documents/Code/python/advent_of_code/AdventOfCode2021/day4')
 
 from day4 import *
@@ -14,7 +15,9 @@ dummy_input_file = "foo"
 
 day4_path = "/home/bturnip/Documents/Code/python/advent_of_code/AdventOfCode2021/day4"
 
-sample_input_draws = [14,30,18,8,3,52]
+sample_input_draws =[]
+sample_bingo_cards =[]
+
 sample_input_file = f"{day4_path}/day4_raw_sample.txt"
 real_input_file = f"{day4_path}/day4_raw_input.txt"
 
@@ -22,6 +25,28 @@ real_input_file = f"{day4_path}/day4_raw_input.txt"
 
 class TestDay4(TestCase):
     """ Test Cases for Day 4 Advent of Code """
+    @classmethod
+    def setUpClass(cls):
+        """ Load data needed by tests """
+        # these values sync up with what is in the sample_input_file
+        # listed above
+        global sample_bingo_cards,sample_input_draws
+        sample_input_draws = [14,30,18,8,3,52]
+
+        y = np.array([ ['13','62','38','10','41']
+                      ,['93','59','60','74','75']
+                      ,['79','18','57','90','28']
+                      ,['56','76','34','96','84']
+                      ,['78','42','69','14','19']])
+
+        z= np.array([ ['26','70','3','5','89']
+                     ,['94','49','35','43','99']
+                     ,['82','36','62','78','37']
+                     ,['90','73','9','38','40']
+                     ,['60','68','8','2','53']])
+
+        sample_bingo_cards.append(y)
+        sample_bingo_cards.append(z)
 
     def test_test(self):
         """ Dummy Test to test nosetests"""
@@ -65,7 +90,7 @@ class TestDay4(TestCase):
 
         #-------------------------------------
         bad_input_vals = [{1:2,3:4}, 123.45, "foo", "randommmm"]
-        
+
         for bad_i in bad_input_vals:
             test13=Day4()
             self.assertRaises(TypeError
@@ -76,8 +101,6 @@ class TestDay4(TestCase):
         test14.set_bingo_draws(sample_input_file)
         self.assertEqual(sample_input_draws
                          ,test14.bingo_draws)
-        
-        
 
     def test_load_bingo_draws_from_file(self):
         """ Test loading bingo_draws from an input file """
@@ -89,15 +112,55 @@ class TestDay4(TestCase):
         self.assertRaises(TypeError
                           ,test21.load_bingo_draws_from_file
                           ,dummy_input_file)
-                          
+
     def test_load_bingo_cards_from_file(self):
         """ Test loading bingo_cards from an input file """
+
+        #-----------------------------------------
         test30=Day4()
+
         self.assertRaises(TypeError
                           ,test30.load_bingo_cards_from_file
                           ,dummy_input_file)
-        
-        
-        
-        
-        
+        #-----------------------------------------
+        test31=Day4()
+
+        # starting with empty value?
+        self.assertEqual([],test31.bingo_cards)
+
+        # call method to load cards from known sample file
+        test31.load_bingo_cards_from_file(sample_input_file)
+
+        # correct number of cards?
+        self.assertEqual(2,len(test31.bingo_cards))
+
+        # each card is correct type?
+        for this_card in test31.bingo_cards:
+            self.assertIsInstance(this_card,np.ndarray)
+
+        # test random card against known data
+        test_index = random.randrange(0,len(test31.bingo_cards))
+
+        expected = sample_bingo_cards[test_index]
+        actual = test31.bingo_cards[test_index]
+
+        self.assertTrue(np.array_equal(expected,actual))
+
+        #-----------------------------------------
+        test32=Day4(sample_input_file)
+        # each card is correct type?
+        for this_card in test32.bingo_cards:
+            self.assertIsInstance(this_card,np.ndarray)
+
+        # correct number of cards?
+        self.assertEqual(2,len(test32.bingo_cards))
+
+        # test random card against known data
+        test_index = random.randrange(0,len(test32.bingo_cards))
+
+        expected = sample_bingo_cards[test_index]
+        actual = test32.bingo_cards[test_index]
+
+        self.assertTrue(np.array_equal(sample_bingo_cards[test_index]
+                                       ,test32.bingo_cards[test_index]))
+        #-----------------------------------------
