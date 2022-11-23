@@ -18,10 +18,9 @@ day4_path = "/home/bturnip/Documents/Code/python/advent_of_code/AdventOfCode2021
 sample_input_draws =[]
 sample_bingo_cards =[]
 
-sample_input_file = f"{day4_path}/day4_raw_sample.txt"
-real_input_file = f"{day4_path}/day4_raw_input.txt"
-
-
+sample_input_file  = f"{day4_path}/day4_raw_sample.txt"
+sample_file_winner = f"{day4_path}/day4_raw_sample_winner.txt"
+real_input_file    = f"{day4_path}/day4_raw_input.txt"
 
 class TestDay4(TestCase):
     """ Test Cases for Day 4 Advent of Code """
@@ -67,6 +66,9 @@ class TestDay4(TestCase):
         #-------------------------------------
         test04=Day4(sample_input_file)
         self.assertEqual(sample_input_draws,test04.bingo_draws)
+        #-------------------------------------
+        test05=Day4(sample_file_winner)
+        self.assertIsInstance(test05,object)
 
     def test_set_bingo_draws(self):
         """ Test setting the bingo draws """
@@ -164,3 +166,18 @@ class TestDay4(TestCase):
         self.assertTrue(np.array_equal(sample_bingo_cards[test_index]
                                        ,test32.bingo_cards[test_index]))
         #-----------------------------------------
+    
+    def test_pick_best_bingo_card(self):
+        """ Test selecting the best bingo card """
+        
+        test40=Day4()
+        # test empty bingo_draws will cause ValueError on pick function
+        self.assertEqual([],test40.bingo_draws)
+        self.assertRaises(ValueError,test40.pick_best_bingo_card)
+        
+        # test empty bingo_cards will cause ValueError on pick function
+        test40.load_bingo_draws_from_file(sample_file_winner)
+        self.assertEqual(sample_input_draws,test40.bingo_draws)
+        self.assertEqual([],test40.bingo_cards)
+        self.assertRaises(ValueError,test40.pick_best_bingo_card)
+        
