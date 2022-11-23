@@ -8,7 +8,17 @@ from os.path import isfile
 sys.path.append('/home/bturnip/Documents/Code/python/advent_of_code/AdventOfCode2021/advent_tools')
 from advent_tools import *
 
+class BingoCardStat(object):
+    def __init__(self,card_num,win_status,num_draws=None,last_draw=None):
+        self.card_num = card_num
+        self.win_status = win_status
+        self.num_draws = num_draws
 
+        if last_draw is not None:
+            self.last_draw = int(last_draw)
+        self.unmarked_sum = 0
+        self.pt1_final_score = 0
+        self.pt2_final_score = 0
 
 class Day4(object):
     """ Object that contains the methods to compute/store
@@ -17,7 +27,7 @@ class Day4(object):
     def __init__(self, input_file=None):
         self.input_file = input_file
         self.valid_bingo_draw_keywords = ["random"]
-        scored_cards = []
+
         self.best_card = None
 
         if input_file is not None and isfile(input_file):
@@ -26,6 +36,9 @@ class Day4(object):
         else:
             self.bingo_draws = []
             self.bingo_cards = []
+
+        self.bingo_card_stats = []
+
 
     def set_bingo_draws(self,input_draws):
         """ set bingo_draws from list, single value integer, or keyword"""
@@ -117,75 +130,141 @@ class Day4(object):
 
         return deck_of_cards
 
-    def pick_best_bingo_card(self):
-        """ Checks all bingo cards for the quickest win """
+    def mark_bingo_card(self,card, draw):
+        """ Marks bingo card with given draw """
+        card[card == draw] = 'X'
+        return card
+
+    def set_card_stats(self,card_number,is_winner,num_draws=None,last_draw=None):
+        """ records the stats for each scored card """
+        # sanity checks
+        if is_winner and (num_draws is None or last_draw is None):
+            err_mssg = "+++ERROR: set_card_stats().  If card is a winner, "\
+                       "num_draws ({num_draws}) and last_draw ({last_draw}) "\
+                       "must be populated."
+            raise ValueError(err_mssg)
+
+        this_stat = BingoCardStat(card_number,is_winner,num_draws,last_draw)
+
+        if is_winner:
+            # -- calculate unmarked_sum and pt1_final_score
+            this_card = self.bingo_cards[card_number].copy()
+            this_card[this_card == 'X'] = 0
+            this_stat.unmarked_sum = np.sum(this_card.astype(int))
+
+            this_stat.pt1_final_score = this_stat.unmarked_sum * last_draw
+
+        # load stat
+        self.bingo_card_stats.append(this_stat)
+
+        return 0
+
+    def set_final_score_pt1(self):
+        """ calculate final score for part 1"""
+        pass
+        
+
+    def score_all_cards(self):
+        """ Scores all bingo cards """
+        # --------------------------------------------------------------
+        # Cycle through each card stored in self.bingo_cards
+        # :
+        #   - For each card:
+        #     - Cycle bingo draws: For each draw:
+        #         - Mark card
+        #         - If we have at least the min # draws for a bingo
+        #           - Check for Win:
+        #             - If a Win:
+        #                 - Set stats:
+        #                   - Mark card as Winner
+        #                   - Record last draw
+        #                   - Record draw number
+        #                 - Record stats
+        #                 - Break out of loop, GO to next card
+        #     - If all draws processed, mark card as non winner,
+        #       GO to the next card
+        #   - After all cards processed:
+        #     - process stat_log
+        #       - pick winner
+        #       - record objects final part 1 score
+        # --------------------------------------------------------------
         num_draws = len(self.bingo_draws)
         num_cards = len(self.bingo_cards)
-        best_card_number = None
-        
+
+        # -- sanity checks
         if num_draws == 0 or num_cards == 0:
             err_mssg = f"+++ERROR: To calculate the winning care, there " \
                        f"must be  a non-zero number of draws " \
                        f"(loaded {num_draws}) and a non-zero number of " \
                        f"bingo cards to score (loaded {num_cards})"
             raise ValueError(err_mssg)
-        
-        for i in range(len(self.bingo_cards)):
-            min_draws_to_win = self.bingo_cards[i].shape[0]
-            this_card = self.bingo_cards[i].copy
-            ### need to make a better copy here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+
+        # -- cycle through all bingo cards
+        for i in range(num_cards):
+            # -- set vars
             card_wins = False
             draws_used = 0
-            
-            print(f"+++ Scoring card #{i}")
-            #print(f"min_draws_to_win:{min_draws_to_win}")
-            #print(f"+++ This card start:\n{this_card}")
-            
-            # score card until it wins or runs out of draws
-            for j in range(len(self.bingo_draws)):
+
+            # -- load card
+            this_card = self.bingo_cards[i]
+            min_draws_to_win = self.bingo_cards[i].shape[0]
+            print(f"+++ Scoring card #{i}:\n{this_card}")
+
+            # -- cycle through the draws, marking and checking card
+            for j in range(num_draws):
                 this_draw = str(self.bingo_draws[j])
                 draws_used +=1
-                
-                #print(f"+++ draw #{draws_used}: {this_draw}")
-                this_card[this_card == this_draw] = 'X'
-                
-                if draws_used >= min_draws_to_win:
-                    #check for win condition
-                    card_wins = self.check_for_win(this_card)
-                    if card_wins:
-                        pass
-                        # set stats
-                        # break loop, scorne next card
 
-                
-            print(f"+++ This card scored:\n{this_card}")
-            print(f"+++ Original card:\n{self.bingo_cards[i]}")
-        print("+++INFO: function exiting with return best_card_number")
-        return best_card_number
-    
+                # -- mark card
+                self.mark_bingo_card(this_card,this_draw)
+
+                # -- check for winner
+                if draws_used >= min_draws_to_win:
+                    card_wins = self.check_for_win(this_card)
+                    # -- calculate winner stats
+                    if card_wins:
+                        self.set_card_stats(i,True,draws_used,this_draw)
+                        break
+
+            if not card_wins:
+                # -- mark card as non-winner
+                self.set_card_stats(i,False)
+
+            print(f"+++ Card #{i} scored:\n{this_card}")
+
+        # -- determine best card and set var with stats
+        # TODO: find_best_card()
+        return 0
+
     def check_for_win(self,bingo_card):
         """ Check card for bingo """
         print("+++ check_for_win")
         target = bingo_card.shape[0]
         check_columns = True
-        
-        # check first row, if no 'X' values, no need to check columns
+
+        # -- check 1st row, if no 'X' values, no need to check columns
         x_count = np.count_nonzero(bingo_card[0] == 'X')
         if x_count == 0:
             check_columns = False
         if x_count == target:
             print("+++ check_for_win--> WINNER!")
             return True
-        
+
+        # -- if 1st row wasn't a winner, check rows
         for i in range (1,target):
-            x_count = np.count_nonzero(bingo_card[0] == 'X')
+            x_count = np.count_nonzero(bingo_card[i] == 'X')
             if x_count == 0 and check_columns:
                 check_columns = False
             if x_count == target:
-                print("+++ check_for_win--> WINNER!")
+                print("+++ check_for_win--> ROW WINNER!")
                 return True
-        
+
+        # -- check columns if needed
         if check_columns:
-            pass
-            
+            for j in range(0,target):
+                x_count = np.count_nonzero(bingo_card[:,j] == 'X')
+                if x_count == target:
+                    print("+++ check_for_win--> COL WINNER!")
+                    return True
+
         return False
