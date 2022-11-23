@@ -16,6 +16,9 @@ class Day4(object):
 
     def __init__(self, input_file=None):
         self.input_file = input_file
+        self.valid_bingo_draw_keywords = ["random"]
+        scored_cards = []
+        self.best_card = None
 
         if input_file is not None and isfile(input_file):
             self.bingo_draws = self.load_bingo_draws_from_file(input_file)
@@ -23,11 +26,6 @@ class Day4(object):
         else:
             self.bingo_draws = []
             self.bingo_cards = []
-
-        self.valid_bingo_draw_keywords = ["random"]
-
-
-        self.best_card = 0
 
     def set_bingo_draws(self,input_draws):
         """ set bingo_draws from list, single value integer, or keyword"""
@@ -55,7 +53,6 @@ class Day4(object):
                        "a list of ints, a single int value or a keyword "\
                        f"in {self.valid_bingo_draw_keywords}"
             raise TypeError(err_mssg)
-
 
     def load_bingo_draws_from_file(self,input_draws):
         """ loads first line from input_draws file to bingo_draws """
@@ -119,3 +116,76 @@ class Day4(object):
         self.bingo_cards = deck_of_cards
 
         return deck_of_cards
+
+    def pick_best_bingo_card(self):
+        """ Checks all bingo cards for the quickest win """
+        num_draws = len(self.bingo_draws)
+        num_cards = len(self.bingo_cards)
+        best_card_number = None
+        
+        if num_draws == 0 or num_cards == 0:
+            err_mssg = f"+++ERROR: To calculate the winning care, there " \
+                       f"must be  a non-zero number of draws " \
+                       f"(loaded {num_draws}) and a non-zero number of " \
+                       f"bingo cards to score (loaded {num_cards})"
+            raise ValueError(err_mssg)
+        
+        for i in range(len(self.bingo_cards)):
+            min_draws_to_win = self.bingo_cards[i].shape[0]
+            this_card = self.bingo_cards[i].copy
+            ### need to make a better copy here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+            card_wins = False
+            draws_used = 0
+            
+            print(f"+++ Scoring card #{i}")
+            #print(f"min_draws_to_win:{min_draws_to_win}")
+            #print(f"+++ This card start:\n{this_card}")
+            
+            # score card until it wins or runs out of draws
+            for j in range(len(self.bingo_draws)):
+                this_draw = str(self.bingo_draws[j])
+                draws_used +=1
+                
+                #print(f"+++ draw #{draws_used}: {this_draw}")
+                this_card[this_card == this_draw] = 'X'
+                
+                if draws_used >= min_draws_to_win:
+                    #check for win condition
+                    card_wins = self.check_for_win(this_card)
+                    if card_wins:
+                        pass
+                        # set stats
+                        # break loop, scorne next card
+
+                
+            print(f"+++ This card scored:\n{this_card}")
+            print(f"+++ Original card:\n{self.bingo_cards[i]}")
+        print("+++INFO: function exiting with return best_card_number")
+        return best_card_number
+    
+    def check_for_win(self,bingo_card):
+        """ Check card for bingo """
+        print("+++ check_for_win")
+        target = bingo_card.shape[0]
+        check_columns = True
+        
+        # check first row, if no 'X' values, no need to check columns
+        x_count = np.count_nonzero(bingo_card[0] == 'X')
+        if x_count == 0:
+            check_columns = False
+        if x_count == target:
+            print("+++ check_for_win--> WINNER!")
+            return True
+        
+        for i in range (1,target):
+            x_count = np.count_nonzero(bingo_card[0] == 'X')
+            if x_count == 0 and check_columns:
+                check_columns = False
+            if x_count == target:
+                print("+++ check_for_win--> WINNER!")
+                return True
+        
+        if check_columns:
+            pass
+            
+        return False
