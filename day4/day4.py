@@ -81,6 +81,7 @@ class Day4(object):
         self.bingo_card_stats = []
 
         self.part1_answer ={}
+        self.part2_answer ={}
 
     def set_bingo_draws(self,input_draws):
         """ set bingo_draws from list, single value integer, or keyword"""
@@ -189,7 +190,7 @@ class Day4(object):
         this_stat = BingoCardStat(card_number,is_winner,num_draws,last_draw)
 
         if is_winner:
-            # -- calculate unmarked_sum and pt1_final_score
+            # -- calculate unmarked_sum and final_score
             this_card = self.bingo_cards[card_number].copy()
             this_card[this_card == 'X'] = 0
             this_stat.unmarked_sum = np.sum(this_card.astype(int))
@@ -249,10 +250,36 @@ class Day4(object):
 
         # -- determine best card and set dict for part 1
         self.set_part1_answer()
+        # -- determin best card and set dict for part 2
+        self.set_part2_answer()
 
-
-        # TODO: find_best_card()
         return 0
+
+    def set_part2_answer(self):
+        """ calculates the answer for part 2"""
+        # part 2 answer is the last winner instead of the first
+        best_card_num = -1
+        slowest_win_draws = 0
+
+        for i in range(len(self.bingo_card_stats)):
+            this_card = self.bingo_card_stats[i]
+            if this_card.is_winner():
+                this_num_draws = this_card.get_num_draws()
+                if this_num_draws > slowest_win_draws:
+                    best_card_num = i
+                    slowest_win_draws = this_num_draws
+
+        winning_card = self.bingo_card_stats[best_card_num]
+        final_pt1_score = winning_card.get_pt1()
+        self.part2_answer["card number"] = best_card_num
+        self.part2_answer["score"] = final_pt1_score
+
+    def get_part2_answer(self):
+        """ returns the answer for part 1 of Day4 puzzle """
+        answer = f"+++ Part 2 results:\n "\
+                 f"\tBest Card Number: {self.part2_answer['card number']} \n"\
+                 f"\tAnswer: {self.part2_answer['score']}"
+        print(answer)
 
     def set_part1_answer(self):
         """ calculates the answer for part 1"""
@@ -271,6 +298,7 @@ class Day4(object):
         final_pt1_score = winning_card.get_pt1()
         self.part1_answer["card number"] = best_card_num
         self.part1_answer["score"] = final_pt1_score
+        
 
     def get_part1_answer(self):
         """ returns the answer for part 1 of Day4 puzzle """

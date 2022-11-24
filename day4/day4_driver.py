@@ -17,3 +17,4 @@ puzzle=Day4(full_file)
 
 puzzle.score_all_cards()
 puzzle.get_part1_answer()
+puzzle.get_part2_answer()
