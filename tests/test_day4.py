@@ -250,6 +250,10 @@ class TestDay4(TestCase):
         num_cards = len(test70.bingo_cards)
         self.assertEqual(num_stats,num_cards)
         #-----------------------------------------
+        # card 2 known stats
+        # unmarked_sum = 1099
+        # last_draw = 52
+        # pt1 score = 571148
         
         
 

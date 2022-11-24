@@ -1,6 +1,29 @@
 """ 2021 Advent of Code: Day 4"""
 # suppress specific pylint checks (http://pylint-messages.wikidot.com/all-codes)
 # pylint: disable=C0104, C0123, C0413, E0602, W0511
+# --------------------------------------------------------------
+# Card scoring logic
+# --------------------------------------------------------------
+# Cycle through each card stored in self.bingo_cards
+#   - For each card:
+#     - Cycle bingo draws: For each draw:
+#         - Mark card
+#         - If we have at least the min # draws for a bingo
+#           - Check for Win:
+#             - If a Win:
+#                 - Set stats:
+#                   - Mark card as Winner
+#                   - Record last draw
+#                   - Record draw number
+#                 - Record stats
+#                 - Break out of loop, GO to next card
+#     - If all draws processed, mark card as non winner,
+#       GO to the next card
+#   - After all cards processed:
+#     - process stat_log
+#       - pick winner
+#       - record objects final part 1 score
+# --------------------------------------------------------------
 import sys
 import random
 from os.path import isfile
@@ -20,6 +43,25 @@ class BingoCardStat(object):
         self.pt1_final_score = 0
         self.pt2_final_score = 0
 
+    def get_stats(self):
+        """ report stats """
+        return vars(self)
+    def get_card_num(self):
+        """ returns card num """
+        return self.card_num
+    def is_winner(self):
+        """ True/False for win status"""
+        return self.win_status
+    def get_num_draws(self):
+        """ returns number of draws"""
+        return self.num_draws
+    def get_pt1(self):
+        """ returns the final answer for Part 1 of Puzzle """
+        return self.pt1_final_score
+    def get_pt2(self):
+        """ returns the final answer for Part 2 of Puzzle """
+        return self.pt2_final_score
+
 class Day4(object):
     """ Object that contains the methods to compute/store
         the 2021 Advent Of Code puzzle for Day 4"""
@@ -28,7 +70,6 @@ class Day4(object):
         self.input_file = input_file
         self.valid_bingo_draw_keywords = ["random"]
 
-        self.best_card = None
 
         if input_file is not None and isfile(input_file):
             self.bingo_draws = self.load_bingo_draws_from_file(input_file)
@@ -39,6 +80,7 @@ class Day4(object):
 
         self.bingo_card_stats = []
 
+        self.part1_answer ={}
 
     def set_bingo_draws(self,input_draws):
         """ set bingo_draws from list, single value integer, or keyword"""
@@ -152,42 +194,16 @@ class Day4(object):
             this_card[this_card == 'X'] = 0
             this_stat.unmarked_sum = np.sum(this_card.astype(int))
 
-            this_stat.pt1_final_score = this_stat.unmarked_sum * last_draw
+            this_stat.pt1_final_score = this_stat.unmarked_sum * this_stat.last_draw
 
         # load stat
         self.bingo_card_stats.append(this_stat)
 
         return 0
 
-    def set_final_score_pt1(self):
-        """ calculate final score for part 1"""
-        pass
-        
-
     def score_all_cards(self):
         """ Scores all bingo cards """
-        # --------------------------------------------------------------
-        # Cycle through each card stored in self.bingo_cards
-        # :
-        #   - For each card:
-        #     - Cycle bingo draws: For each draw:
-        #         - Mark card
-        #         - If we have at least the min # draws for a bingo
-        #           - Check for Win:
-        #             - If a Win:
-        #                 - Set stats:
-        #                   - Mark card as Winner
-        #                   - Record last draw
-        #                   - Record draw number
-        #                 - Record stats
-        #                 - Break out of loop, GO to next card
-        #     - If all draws processed, mark card as non winner,
-        #       GO to the next card
-        #   - After all cards processed:
-        #     - process stat_log
-        #       - pick winner
-        #       - record objects final part 1 score
-        # --------------------------------------------------------------
+
         num_draws = len(self.bingo_draws)
         num_cards = len(self.bingo_cards)
 
@@ -208,7 +224,6 @@ class Day4(object):
             # -- load card
             this_card = self.bingo_cards[i]
             min_draws_to_win = self.bingo_cards[i].shape[0]
-            print(f"+++ Scoring card #{i}:\n{this_card}")
 
             # -- cycle through the draws, marking and checking card
             for j in range(num_draws):
@@ -230,15 +245,42 @@ class Day4(object):
                 # -- mark card as non-winner
                 self.set_card_stats(i,False)
 
-            print(f"+++ Card #{i} scored:\n{this_card}")
+            #print(f"+++ Card #{i} scored")
 
-        # -- determine best card and set var with stats
+        # -- determine best card and set dict for part 1
+        self.set_part1_answer()
+
+
         # TODO: find_best_card()
         return 0
 
+    def set_part1_answer(self):
+        """ calculates the answer for part 1"""
+        best_card_num = -1
+        quickest_win_draws = 1000
+
+        for i in range(len(self.bingo_card_stats)):
+            this_card = self.bingo_card_stats[i]
+            if this_card.is_winner():
+                this_num_draws = this_card.get_num_draws()
+                if this_num_draws < quickest_win_draws:
+                    best_card_num = i
+                    quickest_win_draws = this_num_draws
+
+        winning_card = self.bingo_card_stats[best_card_num]
+        final_pt1_score = winning_card.get_pt1()
+        self.part1_answer["card number"] = best_card_num
+        self.part1_answer["score"] = final_pt1_score
+
+    def get_part1_answer(self):
+        """ returns the answer for part 1 of Day4 puzzle """
+        answer = f"+++ Part 1 results:\n "\
+                 f"\tBest Card Number: {self.part1_answer['card number']} \n"\
+                 f"\tAnswer: {self.part1_answer['score']}"
+        print(answer)
+
     def check_for_win(self,bingo_card):
         """ Check card for bingo """
-        print("+++ check_for_win")
         target = bingo_card.shape[0]
         check_columns = True
 
@@ -247,7 +289,6 @@ class Day4(object):
         if x_count == 0:
             check_columns = False
         if x_count == target:
-            print("+++ check_for_win--> WINNER!")
             return True
 
         # -- if 1st row wasn't a winner, check rows
@@ -256,7 +297,6 @@ class Day4(object):
             if x_count == 0 and check_columns:
                 check_columns = False
             if x_count == target:
-                print("+++ check_for_win--> ROW WINNER!")
                 return True
 
         # -- check columns if needed
@@ -264,7 +304,6 @@ class Day4(object):
             for j in range(0,target):
                 x_count = np.count_nonzero(bingo_card[:,j] == 'X')
                 if x_count == target:
-                    print("+++ check_for_win--> COL WINNER!")
                     return True
 
         return False
