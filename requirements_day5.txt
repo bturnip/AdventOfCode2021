@@ -1,5 +1,4 @@
 numpy
-unittest
 nose
 nosetests
 pinocchio
