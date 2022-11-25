@@ -18,5 +18,4 @@ jobs:
                     pip install -r requirements_day5.txt
             
             - name: Run nosetests
-              run: |
-                   day5/nosetests
+              run: cd day5 && nosetests
