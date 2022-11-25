@@ -15,6 +15,11 @@ class Day5():
         else:
             self.vent_coords = []
 
+        if len(self.vent_coords) > 0:
+            self.marked_map = self.map_coords(self.vent_coords)
+        else:
+            self.marked_map = []
+
     def load_all_coords_from_file(self,input_file):
         """ loads the map of coords from file """
         # --sanity checks ---------------------------------------------
@@ -25,13 +30,33 @@ class Day5():
 
         with open(input_file,'r') as input_stream:
             raw_data=input_stream.readlines()
-            input_stream.close()
+        input_stream.close()
 
-            self.vent_coords =np.array(
-                              [x.rstrip().split(' -> ') for x in raw_data])
+        self.vent_coords = np.empty((0,4), int)
+
+        coord_pairs =np.array([x.rstrip().split(' -> ') for x in raw_data])
+
+        for this_pair in coord_pairs:
+            start_pt = this_pair[0]
+            stop_pt = this_pair[1]
+            xstart, ystart = start_pt.split(',')
+            xend, yend = stop_pt.split(',')
+            
+            this_row = np.array([[xstart,ystart,xend,yend]])
+            #print(f"{xstart}|{ystart}|{xend}|{yend}")
+            self.vent_coords = np.r_[self.vent_coords ,this_row]
 
         return self.vent_coords
 
     def get_all_coords(self):
         """ get the list of loaded coords """
         return self.vent_coords
+
+    def map_coords(self,coords):
+        """ maps a set of coords to self.marked_map """
+        #-- find the boundaries of the map
+        #   - entries are a np array of two element ndarrays
+        #   - example:
+        return 0
+
+
