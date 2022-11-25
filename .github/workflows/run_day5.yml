@@ -19,5 +19,4 @@ jobs:
             
             - name: Run nosetests
               run: |
-                   cd day5
-                   nosetests day5
+                   day5/nosetests
