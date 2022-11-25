@@ -1,0 +1,12 @@
+name: Day5 workflow
+
+on:
+    push:
+        branches: ["main","day5"]
+
+jobs:
+    runs-on: ubuntu-18.04
+    container: python:3.9-slim
+    steps:
+        - name: Checkout code
+          uses: actions/checkout@v3
