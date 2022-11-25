@@ -2,7 +2,7 @@ name: Day5 workflow
 
 on:
     push:
-        branches: ["main","day5"]
+        branches: [ "day5" ]
 
 jobs:
     build:
