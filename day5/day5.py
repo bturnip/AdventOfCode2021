@@ -1,6 +1,6 @@
 """ 2021 Advent of Code: Day 5"""
 # suppress specific pylint checks (http://pylint-messages.wikidot.com/all-codes)
-# pylint: disable=R1721
+# pylint: disable=R1721, C0103
 from os.path import isfile
 import numpy as np
 
@@ -9,6 +9,8 @@ class Day5():
 
     def __init__(self, input_file=None):
         self.input_file = input_file
+        self.map_counts = {}
+        self.answer_key = {}
 
         #hydrothermal vent coords
         if input_file is not None and isfile(input_file):
@@ -20,16 +22,6 @@ class Day5():
             self.marked_map = self.map_coords(self.vent_coords)
         else:
             self.marked_map = []
-
-        if len(self.marked_map) > 0:
-            self.map_counts = self.set_map_counts(self.marked_map)
-        else:
-            self.map_counts = {}
-
-        if len(self.map_counts) > 0:
-            self.part1_answer = self.set_part1_answer(self.map_counts)
-        else:
-            self.part1_answer = {"map coords >= 2": None}
 
 
     def load_all_coords_from_file(self,input_file):
@@ -79,18 +71,18 @@ class Day5():
 
     def map_coords(self,coords):
         """ maps a set of coords to self.marked_map """
-        # based on input analysis, assumption is that 1000x1000 grid is
-        # sufficient to map all coords
+        # assumption: 1000x1000 grid is sufficient based on input analysis
 
-        #-- get max/min values
-        # x1_max, y1_max, x2_max, y2_max = coords.max(axis=0)
-        # x1_min, y1_min, x2_min, y2_min = coords.min(axis=0)
-
-        # -- create the map
+        # -- create the empty map
         self.marked_map = np.zeros((1000,1000),int)
 
         # -- process the coordinates
+        # -- skip the diagonals on the first pass
+        #    - record the answer for part1
+        # -- process diagonals
+        #    - record the answer for part2
         for c in coords:
+            # -- process horizontal and vertical lines
             if c[0] == c[2]:
                 # horizontal line
                 rownum = c[0]
@@ -100,7 +92,7 @@ class Day5():
                           , target_indices
                           , 1)
                 #print(f"result row in marked map:\n{self.marked_map[c[0]]}")
-            if c[1] == c[3]:
+            elif c[1] == c[3]:
                 # vertical line
                 r_start = min(c[0],c[2])
                 r_stop = max(c[0],c[2])+1
@@ -114,6 +106,54 @@ class Day5():
                 np.add.at(self.marked_map[:,colnum]
                           , target_indices
                           , 1)
+
+        # -- record part1 answer
+        self.set_map_counts(self.marked_map)
+        self.set_answer_for_part(1)
+
+        # -- process diagonals for part2
+        for c in coords:
+            # -- process horizontal and vertical lines
+            if c[0] != c[2] and c[1] != c[3]:
+                # get starting point, ie, which coord has lowest x value
+                # and direction (up or down)
+                if  min(c[0],c[2]) == c[0]:
+                    x_start_idx = 0
+                else:
+                    x_start_idx = 2
+
+                start_x = c[x_start_idx]
+                start_y = c[x_start_idx + 1]
+
+                if x_start_idx == 0:
+                    end_x = c[2]
+                    end_y = c[3]
+                else:
+                    end_x = c[0]
+                    end_y = c[1]
+
+                if start_y > end_y:
+                    direction = 'up'
+                else:
+                    direction = 'down'
+
+                # mark diagonal line
+                this_x = start_x
+                this_y = start_y
+
+                self.marked_map[this_x][this_y] += 1
+                for i in range(start_x,end_x):
+                    this_x += 1
+                    if direction == 'down':
+                        this_y +=1
+                    else:
+                        this_y -=1
+
+                    self.marked_map[this_x][this_y] += 1
+        # -- record part2 answer
+        #    NB: this updates the marked map, no going back to part1 state
+        self.set_map_counts(self.marked_map)
+        self.set_answer_for_part(2)
 
         return self.marked_map
 
@@ -132,18 +172,23 @@ class Day5():
         self.map_counts = dict(zip(*results))
         return self.map_counts
 
-    def set_part1_answer(self,freqs):
-        """ stores the answer for part 1 """
+    def set_answer_for_part(self,part_num):
+        """ stores the answer for the input part num """
+
+        # -- Answer is how many map points have a value > 2
+        freqs = self.map_counts
         count_target = 2
         curr_sum = 0
-        for this_key in freqs.keys():
+        for this_key, this_val in freqs.items():
             if this_key >= count_target:
-                curr_sum += freqs[this_key]
+                curr_sum += this_val
 
-        results = {"map coords >= 2": curr_sum}
-        self.part1_answer = results
-        return results
+        this_key = f"part{str(part_num)}"
 
-    def get_part1_answer(self):
+        self.answer_key.update({this_key: curr_sum})
+        return self.answer_key
+
+    def get_answer_key(self):
         """ returns the dict with the answer for part 1"""
-        return self.part1_answer
+
+        return self.answer_key

@@ -25,8 +25,9 @@ test_vent_coords = np.array([
 
 # puzzle runner ----------------------------------
 puzzle = Day5(this_file)
-print(f"raw map counts:{puzzle.get_map_counts()}")
-print(f"Part 1 puzzle answer:{puzzle.get_part1_answer()}")
+puzzle = print(puzzle.get_answer_key())
+# answer key: {'part1': 6283, 'part2': 18864}
+
 
 
 
