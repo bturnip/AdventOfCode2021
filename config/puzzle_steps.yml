@@ -21,6 +21,7 @@ DEV STEPS: Steps, using Day 6 as example:
             file: setup.cfg
             file: tests/test_day6.py
             file: input/input.txt
+            file: steps_day6.yml
         in_dir: BASEDIR:
             file: requirements_day6.txt
         in_dir: BASEDIR/.github/workflows:
@@ -35,6 +36,9 @@ DEV STEPS: Steps, using Day 6 as example:
         copy_header_only:
             file: day6.py
             file: tests/test_day6.py
+        copy_file:
+            SCRIPTED_STEP (see BASEDIR/config/setup_next_day.py)
+            file: config/puzzle_steps.yml -->steps_day6.yml
         AoC_data:
             file: input/input.txt
             file: <sample files as needed>
