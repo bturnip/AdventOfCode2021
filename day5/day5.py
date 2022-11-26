@@ -53,9 +53,9 @@ class Day5():
             stop_pt = this_pair[1]
             xstart, ystart = start_pt.split(',')
             xend, yend = stop_pt.split(',')
-            
+
             this_row = np.array([[xstart,ystart,xend,yend]])
-            
+
             #print(f"{xstart}|{ystart}|{xend}|{yend}")
             self.vent_coords = np.r_[self.vent_coords ,this_row.astype(int)]
 
@@ -67,13 +67,36 @@ class Day5():
 
     def map_coords(self,coords):
         """ maps a set of coords to self.marked_map """
-        #-- find the boundaries of the map
-        #   - entries are a np array of two element ndarrays
-        #   - example:
-        x1_max, y1_max, x2_max, y2_max = coords.max(axis=0)
-        print("+++INFO:map_coords, column maxes")
-        print(x1_max, y1_max, x2_max, y2_max)
+        # based on input analysis, assumption is that 1000x1000 grid is
+        # sufficient to map all coords
         
+        #-- get max/min values
+        x1_max, y1_max, x2_max, y2_max = coords.max(axis=0)
+        x1_min, y1_min, x2_min, y2_min = coords.min(axis=0)
+        
+        # -- create the map
+        self.marked_map = np.zeros((1000,1000),int)
+        
+        # -- process the coordinates
+        for c in coords:
+            line_len = 0
+            if(c[0] == c[2]):
+                # horizontal line
+                rownum = c[0]
+                # target indices
+                target_indices = [x for x in range(min(c[1],c[3])
+                                                   ,max(c[1],c[3])+1)]
+                line_len = abs(c[3]- c[1])
+                
+                print(f"horiz: coords:{c}, line len:{line_len}")
+                print(f"indices:{target_indices}")
+                np.add.at(self.marked_map[rownum]
+                          , target_indices
+                          , 1)
+                print(f"result row in marked map:\n{self.marked_map[c[0]]}")
+            
+
+
         return 0
 
 
