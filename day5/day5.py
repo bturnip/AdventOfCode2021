@@ -1,5 +1,6 @@
 """ 2021 Advent of Code: Day 5"""
 # suppress specific pylint checks (http://pylint-messages.wikidot.com/all-codes)
+# pylint: disable=R1721
 from os.path import isfile
 import numpy as np
 
@@ -19,6 +20,17 @@ class Day5():
             self.marked_map = self.map_coords(self.vent_coords)
         else:
             self.marked_map = []
+
+        if len(self.marked_map) > 0:
+            self.map_counts = self.set_map_counts(self.marked_map)
+        else:
+            self.map_counts = {}
+
+        if len(self.map_counts) > 0:
+            self.part1_answer = self.set_part1_answer(self.map_counts)
+        else:
+            self.part1_answer = {"map coords >= 2": None}
+
 
     def load_all_coords_from_file(self,input_file):
         """ loads the map of coords from file """
@@ -69,34 +81,69 @@ class Day5():
         """ maps a set of coords to self.marked_map """
         # based on input analysis, assumption is that 1000x1000 grid is
         # sufficient to map all coords
-        
+
         #-- get max/min values
-        x1_max, y1_max, x2_max, y2_max = coords.max(axis=0)
-        x1_min, y1_min, x2_min, y2_min = coords.min(axis=0)
-        
+        # x1_max, y1_max, x2_max, y2_max = coords.max(axis=0)
+        # x1_min, y1_min, x2_min, y2_min = coords.min(axis=0)
+
         # -- create the map
         self.marked_map = np.zeros((1000,1000),int)
-        
+
         # -- process the coordinates
         for c in coords:
-            line_len = 0
-            if(c[0] == c[2]):
+            if c[0] == c[2]:
                 # horizontal line
                 rownum = c[0]
-                # target indices
                 target_indices = [x for x in range(min(c[1],c[3])
                                                    ,max(c[1],c[3])+1)]
-                line_len = abs(c[3]- c[1])
-                
-                print(f"horiz: coords:{c}, line len:{line_len}")
-                print(f"indices:{target_indices}")
                 np.add.at(self.marked_map[rownum]
                           , target_indices
                           , 1)
-                print(f"result row in marked map:\n{self.marked_map[c[0]]}")
-            
+                #print(f"result row in marked map:\n{self.marked_map[c[0]]}")
+            if c[1] == c[3]:
+                # vertical line
+                r_start = min(c[0],c[2])
+                r_stop = max(c[0],c[2])+1
 
+                colnum = c[1]
+                target_indices = [y for y in range(r_start,r_stop)]
 
-        return 0
+                #print(f"+++INFO: vertical line\n - coords:({c})\n" \
+                #      f" - col num:{colnum}\n - range:({r_start},{r_stop})\n" \
+                #      f" - targets:{target_indices}")
+                np.add.at(self.marked_map[:,colnum]
+                          , target_indices
+                          , 1)
 
+        return self.marked_map
 
+    def get_map(self):
+        """ return marked map"""
+        # how to display and scroll?
+        return self.marked_map
+
+    def get_map_counts(self):
+        """ return map_counts, freq of values of marked_map"""
+        return self.map_counts
+
+    def set_map_counts(self,this_map):
+        """ store the frequency values from the marked map"""
+        results = np.unique(this_map, return_counts=True)
+        self.map_counts = dict(zip(*results))
+        return self.map_counts
+
+    def set_part1_answer(self,freqs):
+        """ stores the answer for part 1 """
+        count_target = 2
+        curr_sum = 0
+        for this_key in freqs.keys():
+            if this_key >= count_target:
+                curr_sum += freqs[this_key]
+
+        results = {"map coords >= 2": curr_sum}
+        self.part1_answer = results
+        return results
+
+    def get_part1_answer(self):
+        """ returns the dict with the answer for part 1"""
+        return self.part1_answer
