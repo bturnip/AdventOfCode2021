@@ -18,7 +18,7 @@ class TestDay5(TestCase):
         # -- input file setup        
         dummy_input_file = "foo.file"
         full_file = FULL_FILE
-        ten_line_sample_file = TEN_LINE_SAMPLE
+        sample_file = SAMPLE_FILE
 
     def test_test(self):
         """ Dummy Test to test nosetests"""

@@ -6,7 +6,7 @@ from config_day6 import *
 
 # -- uncomment one of these file choices below
 this_file = FULL_FILE
-this_file = TEN_LINE_SAMPLE
+this_file = SAMPLE_FILE
 print(f"+++INFO: using {this_file}")
 
 
