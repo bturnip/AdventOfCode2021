@@ -12,9 +12,16 @@ class Day6():
         self.answer_key = {}
         
         if input_file is not None and isfile(input_file):
-            self.fish = self.load_fish_from_file(input_file)
+            self.starting_fish = self.load_fish_from_file(input_file)
         else:
-            self.fish = []
+            self.starting_fish = []
+        
+        if len(self.starting_fish) > 0:
+            self.total_fish_count = len(self.starting_fish)
+            self.fish_status = self.initialize_fish_status(self.starting_fish)
+        else:
+            self.total_fish_count = 0
+            self.fish_status = []
         
     def load_fish_from_file (self,input_file):
         """ loads the lantern fish from file """
@@ -36,12 +43,18 @@ class Day6():
         
         fish_data = list(map(int,raw_data[0].split(',')))
 
-        self.fish=np.array(fish_data)
-        return self.fish
+        self.starting_fish=np.array(fish_data)
+        return self.starting_fish
 
-        
+    def initialize_fish_status (self, fish_list):
+        """ store frequency values from input list of fish """
+        results = np.unique(fish_list, return_counts=True)
+        self.fish_status = dict(zip(*results))
+        return self.fish_status
+          
             
     
     def get_answer_key(self):
         """ return answer key"""
+        return self.answer_key
 

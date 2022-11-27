@@ -13,13 +13,17 @@ class TestDay6(TestCase):
     @classmethod
     def setUpClass(cls):
         """ Load data needed by tests """
-        global dummy_input_file, sample_file, full_file, sample_file_count
+        global dummy_input_file, sample_file, full_file
+        global sample_file_count, sample_file_freqs
         
         # -- input file setup        
         dummy_input_file = "foo.file"
         full_file = FULL_FILE
         sample_file = SAMPLE_FILE
+        
+        # verified data
         sample_file_count = 50
+        sample_file_freqs = {1: 37, 2: 3, 3: 4, 4: 4, 5: 2}
 
     def test_test(self):
         """ Dummy Test to test nosetests"""
@@ -28,8 +32,19 @@ class TestDay6(TestCase):
     def test_class_setup(self):
         """ Testing nosetest class setup"""
         self.assertTrue(isfile(full_file))
-        
         self.assertTrue(isfile(sample_file))
+        
+        test00 = Day6(sample_file)
+        self.assertEqual(len(test00.starting_fish),sample_file_count)
+        self.assertEqual(len(test00.fish_status),len(sample_file_freqs))
+        #-------------------------------------
+        # -- get random key in status dict and compare to the known data
+        key_num = random.randrange(0,len(test00.fish_status))
+        # don't use this on large dicts
+        random_key = list(test00.fish_status)[key_num]
+        expected_result = sample_file_freqs[random_key]
+        actual_result = sample_file_freqs[random_key]
+        self.assertEqual(expected_result,actual_result)
 
     def test_day6_object_creation(self):
         """ Test Day6 object creation"""
@@ -42,6 +57,7 @@ class TestDay6(TestCase):
         #-------------------------------------
         test03=Day6(sample_file)
         self.assertIsInstance(test02,object)
+        # -------------------------------------     
 
 
     def test_load_fish_from_file(self):
@@ -51,9 +67,15 @@ class TestDay6(TestCase):
         
         test12=Day6(sample_file)
         expected_result = sample_file_count
-        actual_result = len(test12.fish)
+        actual_result = len(test12.starting_fish)
         self.assertEqual(expected_result,actual_result)
         
         test13=Day6()
-        self.assertEqual(0,len(test13.fish))
+        self.assertEqual(0,len(test13.starting_fish))
+    
+    def test_initialize_fish_status(self):
+        """ Testing the fish status tracker """
+        test21=Day6(sample_file)
+        pass
+        #raise ValueError("+++TODO: implement the initialize_fish_status test here")
 
