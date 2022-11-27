@@ -12,7 +12,15 @@ print(f"+++INFO: using {this_file}")
 
 # puzzle runner ----------------------------------
 puzzle = Day6(this_file)
-puzzle = print(puzzle.get_answer_key())
+
+
+x=puzzle.fish
+print(x)
+print(f"type(x):{type(x)}")
+print(f"len(x):{len(x)}")
+
+
+#puzzle = print(puzzle.get_answer_key())
 
 
 
