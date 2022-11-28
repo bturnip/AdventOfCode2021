@@ -1,4 +1,6 @@
 DEV STEPS: Steps, using {DAY_NUM} as example:
+    00: run BASEDIR/config/setup_next_day.py
+        - steps prefixed with [SCRIPTED] have already been automated
     01: Have the most recent version of the repo
         in_dir: BASEDIR
         code: git checkout main
@@ -8,12 +10,11 @@ DEV STEPS: Steps, using {DAY_NUM} as example:
             code: git branch
         To make and checkout new branch:
             code: git checkout -b my-new-branch
-    03: create folders under BASEDIR:
-        SCRIPTED_STEP (see BASEDIR/config/setup_next_day.py)
+    03: [SCRIPTED]create folders under BASEDIR:
             dir: ./{DAY_NUM}
             dir: ./{DAY_NUM}/input_files
             dir: ./{DAY_NUM}/tests
-    04: each day will have the same skeleton of files:
+    04: [SCRIPTED] create skeleton of common files:
         in_dir: BASEDIR/{DAY_NUM}:
             file: {DAY_NUM}.py
             file: config_{DAY_NUM}.py
