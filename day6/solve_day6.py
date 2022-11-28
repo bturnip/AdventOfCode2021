@@ -10,10 +10,22 @@ this_file = FULL_FILE
 print(f"+++INFO: using {this_file}...")
 
 # puzzle runner ----------------------------------
-print(f"+++INFO: starting puzzle...")
+print("+++INFO: starting puzzle...")
 puzzle = Day6(this_file)
+
+print("\tsolving part 1:")
 puzzle.solve_part1()
 print(puzzle.get_answer_key())
+
+# need to create a new object so that the status is 
+# original input
+print("\tsolving part 2:")
+puzzle2=Day6(this_file)
+puzzle2.solve_part2()
+print(puzzle2.get_answer_key())
+
+
+
 
 
 

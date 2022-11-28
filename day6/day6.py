@@ -115,6 +115,14 @@ class Day6():
 
         self.answer_key["part 1:"]= self.total_fish_count
 
+    def solve_part2(self):
+        """ how many fish after 80 days? """
+        num_days = 256
+        for x in range(num_days):
+            self.process_new_day()
+
+        self.answer_key["part 2:"]= self.total_fish_count
+
 
     def get_answer_key(self):
         """ return answer key"""
