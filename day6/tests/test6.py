@@ -69,9 +69,11 @@ class TestDay6(TestCase):
         expected_result = sample_file_count
         actual_result = len(test12.starting_fish)
         self.assertEqual(expected_result,actual_result)
+        self.assertEqual(expected_result,test12.total_fish_count)
         
         test13=Day6()
         self.assertEqual(0,len(test13.starting_fish))
+        self.assertEqual(0,test13.total_fish_count)
     
     def test_initialize_fish_status(self):
         """ Testing the fish status tracker """
