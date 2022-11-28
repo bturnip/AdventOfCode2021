@@ -1,0 +1,82 @@
+DEV STEPS: Steps, using {DAY_NUM} as example:
+    01: Have the most recent version of the repo
+        in_dir: BASEDIR
+        code: git checkout main
+    02: Make a new branch for a new day's puzzle
+        Creating a new branch is part of old branch cleanup.
+        Confirm with:
+            code: git branch
+        To make and checkout new branch:
+            code: git checkout -b my-new-branch
+    03: create folders under BASEDIR:
+        SCRIPTED_STEP (see BASEDIR/config/setup_next_day.py)
+            dir: ./{DAY_NUM}
+            dir: ./{DAY_NUM}/input_files
+            dir: ./{DAY_NUM}/tests
+    04: each day will have the same skeleton of files:
+        in_dir: BASEDIR/{DAY_NUM}:
+            file: {DAY_NUM}.py
+            file: config_{DAY_NUM}.py
+            file: solve_{DAY_NUM}.py
+            file: setup.cfg
+            file: tests/test_{DAY_NUM}.py
+            file: input/input.txt
+            file: steps_{DAY_NUM}.yml
+        in_dir: BASEDIR:
+            file: requirements_{DAY_NUM}.txt
+        in_dir: BASEDIR/.github/workflows:
+            file: {DAY_NUM}.yml
+    05: populate files:
+        copy_content_from_previous_day_and_update:
+            file: config_{DAY_NUM}.py
+            file: solve_{DAY_NUM}.py
+            file: setup.cfg
+            file: requirements_{DAY_NUM}.txt
+            file: {DAY_NUM}.yml
+        copy_header_only:
+            file: {DAY_NUM}.py
+            file: tests/test_{DAY_NUM}.py
+        copy_file:
+            SCRIPTED_STEP (see BASEDIR/config/setup_next_day.py)
+            file: config/puzzle_steps.yml -->steps_{DAY_NUM}.yml
+        AoC_data:
+            file: input/input.txt
+            file: <sample files as needed>
+                NB: update config_{DAY_NUM} and test cases as needed
+    06: get branch initialized and push
+        code: git add file1 dir2/file2 
+        code: git commit -m "{DAY_NUM}: initial commit"
+        code: git push -u origin my-new-branch 
+            NB: this is only need the first time
+    08: get Github Actions working:
+        write the minimal code to get a successful github action build
+    09: develop code using TDD:
+        build a test case, write code to pass
+    10: commit code at regular intervals
+        code: git add <files> {as needed}
+        code: git commit <files> -m "{DAY_NUM}: <this checkpoint>"
+        code: git push
+        check status of Actions build
+    11: repeat develop/test/commit/push branch cycle until puzzle solved
+    12: Prep for pull request:
+        code: git checkout main
+        code: git pull
+        code: git checkout my-new-branch
+        code: git merge main
+        For any conflicts or errors:
+            - <fix any merge conflicts>
+            - git add {as needed}
+            - git commit ...
+            - git push
+    13: Make pull request on github
+        - merge pull requests
+        - delete branch on github
+    14: Cleanup local dev environment:
+        - make compress archive of project
+        - set dev environment to fresh starting point
+            code: git checkout main
+            code: git pull
+        - cleanup by deleting old branch
+            code: git branch -d my-new-branch
+        - create and checkout a new branch for next day's puzzle
+            code: git checkout -b my-next-branch
