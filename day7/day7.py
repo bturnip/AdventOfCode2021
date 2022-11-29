@@ -10,7 +10,7 @@ class Day7():
     def __init__(self, input_file=None):
         self.input_file = input_file
         self.answer_key = {}
-        
+
 
         if input_file is not None and isfile(input_file):
             self.starting_crabs = self.load_data_from_file(input_file)
@@ -18,10 +18,9 @@ class Day7():
             self.starting_crabs = []
 
         if len(self.starting_crabs) > 0:
-            pass
+            self.crab_horiz_pos = self.initialize_crab_horiz_pos(self.starting_crabs)
         else:
-            pass
-
+            self.crab_horiz_pos = []
 
 
     def load_data_from_file (self,input_file):
@@ -42,13 +41,20 @@ class Day7():
         with open(input_file,'r') as input_stream:
             raw_data=input_stream.readlines()
         input_stream.close()
-        
+
         crab_data = list(map(int,raw_data[0].split(',')))
 
         self.starting_crabs=np.array(crab_data)
         return self.starting_crabs
+
+    def initialize_crab_horiz_pos(self, crab_data):
+        """ store crab positions from input """
+        results = np.unique(crab_data, return_counts=True)
+        self.crab_data = dict(zip(*results))
+        return self.crab_data
         
-        
+
+
     def get_answer_key(self):
         """ return answer key"""
         return self.answer_key

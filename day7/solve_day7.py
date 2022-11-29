@@ -6,12 +6,16 @@ from config_day7 import *
 
 # -- uncomment one of these file choices below
 this_file = FULL_FILE
-this_file = SAMPLE_FILE
+#this_file = SAMPLE_FILE
 print(f"+++INFO: using {this_file}...")
 
 # puzzle runner ----------------------------------
 print("+++INFO: starting puzzle...")
 puzzle = Day7(this_file)
+
+print(f'+++DEBUG: starting_crabs: {puzzle.starting_crabs}')
+print(f'+++DEBUG: crab positions: {puzzle.crab_horiz_pos}')
+
 
 #print("\tsolving part 1:")
 #puzzle.solve_part1()

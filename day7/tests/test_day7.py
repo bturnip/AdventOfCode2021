@@ -14,6 +14,7 @@ class TestDay7(TestCase):
     def setUpClass(cls):
         """ Load data needed by tests """
         global dummy_input_file, sample_file, full_file
+        global sample_record_count
         
         # -- input file setup        
         dummy_input_file = "foo.file"
@@ -21,7 +22,8 @@ class TestDay7(TestCase):
         sample_file = SAMPLE_FILE
         
         # verified data
-        #TODO
+        sample_record_count=108
+        
 
     def test_test(self):
         """ Dummy Test to test nosetests"""
@@ -45,8 +47,17 @@ class TestDay7(TestCase):
         self.assertIsInstance(test02,object)
         # -------------------------------------     
 
-
     def test_load_from_file(self):
-        """ Testing () """
-        #TODO
-        pass
+        """ Testing load_data_from_file() """
+        test11=Day7(sample_file)
+        expected_value=sample_record_count
+        test_value = len(test11.starting_crabs)
+        
+        test12=Day7()
+        self.assertRaises(TypeError,test12.load_data_from_file,dummy_input_file)
+
+    def test_get_answer_key(self):
+        test21=Day7()
+        self.assertIsInstance(test21.answer_key,dict)
+        self.assertEqual(0,len(test21.answer_key))
+        
