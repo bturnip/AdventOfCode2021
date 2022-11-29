@@ -1,4 +1,4 @@
-""" config file for {DAY_NUM} """
+""" config file for day7 """
 
 BASEPATH = "./input_files/"
 BASEFILE = "input.txt"
