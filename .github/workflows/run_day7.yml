@@ -1,8 +1,8 @@
-name: Day{NUM} workflow
+name: Day7 workflow
 
 on:
     push:
-        branches: [ "{DAY_NUM}" ]
+        branches: [ "day7" ]
 
 jobs:
     build:
@@ -15,7 +15,7 @@ jobs:
             - name: Install dependencies
               run: |
                     python -m pip install --upgrade pip
-                    pip install -r requirements_{DAY_NUM}.txt
+                    pip install -r requirements_day7.txt
             
             - name: Run nosetests
-              run: cd {DAY_NUM} && nosetests
+              run: cd day7 && nosetests
