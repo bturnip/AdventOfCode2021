@@ -8,7 +8,7 @@ from day{NUM} import *
 from config_day{NUM} import *
 import random
 
-class Testday{NUM}(TestCase):
+class TestDay{NUM}(TestCase):
     """ Test Cases for Day {NUM} Advent of Code """
     @classmethod
     def setUpClass(cls):
