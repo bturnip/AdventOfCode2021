@@ -75,7 +75,7 @@ class Day7():
             raise ValueError(err_mssg)
 
         if run_part1_model:
-            # get all positions, calculate fuel use for 1 unit per position
+            # --get all positions, calculate fuel use for 1 unit per position
             print(f"+++INFO: making fuel calculations with Model:{model}")
             fuel_needed={}
 
@@ -90,16 +90,32 @@ class Day7():
                 self.fuel_needed = fuel_needed
 
         if run_part2_model:
-            # get all positions, calculate fuel use for 1 unit per position
+            # cycle through all available positions
+            min_pos = min(crab_pos_data.keys())
+            max_pos = max(crab_pos_data.keys())
+            print(f'+++DEBUG: min, max crab pos_: {min_pos},{max_pos}')
+
+
+
             print(f"+++INFO: making fuel calculations with Model:{model}")
             fuel_needed={}
 
-            for this_pos in crab_pos_data.keys():
+            #for this_pos in crab_pos_data.keys():
+            for this_pos in range(min_pos,max_pos):
                 fuel_cost = 0
+                #print(f'+++DEBUG: calculating for move to {this_pos}')
 
                 for k,v in crab_pos_data.items():
-                    #print(f"{fuel_cost} += ({v} * abs({k}-{this_pos}))")
-                    fuel_cost += (v * abs(k - this_pos))
+                    base_cost = abs(k - this_pos)
+                    cost_multiplier = (base_cost*(base_cost + 1) / 2)
+                    fuel_cost += (v * cost_multiplier)
+
+                    """
+                    print(f'\tDEBUG: to move a unit from [{k}] to [{this_pos}]: {cost_multiplier}')
+                    print(f'\tDEBUG: cost_multiplier: {cost_multiplier}')
+                    print(f'\tDEBUG: [{v} * {cost_multiplier}]')
+                    print(f'\tDEBUG: fuel_cost: {fuel_cost}\n')
+                    """
 
                 fuel_needed[this_pos] = fuel_cost
                 self.fuel_needed = fuel_needed
@@ -132,7 +148,13 @@ class Day7():
             print("+++ERROR: no data in the fuel_cost dict, nothing to do...")
             return 0
 
-        print("+++DEBUG: working from here ++++++++++++++++++++++++++")
+        min_fuel = min(self.fuel_needed.values())
+        pos_key = min(self.fuel_needed, key=self.fuel_needed.get)
+
+        part2_answer = f"Position:({pos_key}) :Fuel Needed:({min_fuel})"
+        print(f"+++ANSWER: {part2_answer}" )
+        self.answer_key["part 2:"]= part2_answer
+        return self.answer_key
 
     def get_answer_key(self):
         """ return answer key"""
