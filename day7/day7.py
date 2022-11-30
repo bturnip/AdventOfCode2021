@@ -22,6 +22,11 @@ class Day7():
         else:
             self.crab_horiz_pos = []
 
+        if len(self.crab_horiz_pos) > 0:
+            self.fuel_needed = self.calculate_fuel_use(self.crab_horiz_pos)
+        else:
+            self.fuel_needed = {}
+
 
     def load_data_from_file (self,input_file):
         """ loads the #TODO from file """
@@ -52,8 +57,44 @@ class Day7():
         results = np.unique(crab_data, return_counts=True)
         self.crab_data = dict(zip(*results))
         return self.crab_data
-        
 
+    def calculate_fuel_use(self, crab_pos_data=None):
+        """ calculate fuel units to line up crabs, per position "
+            creates self.fuel_needed dict """
+
+        if crab_pos_data is None:
+            crab_pos_data = self.crab_horiz_pos
+
+        # get all positions, calculate fuel use for 1 unit per position
+        fuel_needed={}
+
+        for this_pos in crab_pos_data.keys():
+            fuel_cost = 0
+
+            for k,v in crab_pos_data.items():
+                #print(f"{fuel_cost} += ({v} * abs({k}-{this_pos}))")
+                fuel_cost += (v * abs(k - this_pos))
+
+            fuel_needed[this_pos] = fuel_cost
+            self.fuel_needed = fuel_needed
+
+        return fuel_needed
+
+    def solve_part1(self):
+        """ What is the least fuel cost to align the crabs """
+        
+        if len(self.fuel_needed) == 0:
+            print("+++ERROR: no data in the fuel_cost dict, nothing to do...")
+            return 0
+        
+        # --find minimum value in the fuel_cost dict and corresponding key
+        #print(f"whole dict:\n{self.fuel_needed}")
+        min_fuel = min(self.fuel_needed.values())
+        pos_key = min(self.fuel_needed, key=self.fuel_needed.get)
+        
+        part1_answer = f"Position:({pos_key}) :Fuel Needed:({min_fuel})"
+        print(f"+++ANSWER: {part1_answer}" )      
+        self.answer_key["part 1:"]= part1_answer
 
     def get_answer_key(self):
         """ return answer key"""
