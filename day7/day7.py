@@ -9,6 +9,7 @@ class Day7():
 
     def __init__(self, input_file=None):
         self.input_file = input_file
+        self.fuel_needed = {}
         self.answer_key = {}
 
 
@@ -21,11 +22,6 @@ class Day7():
             self.crab_horiz_pos = self.initialize_crab_horiz_pos(self.starting_crabs)
         else:
             self.crab_horiz_pos = []
-
-        if len(self.crab_horiz_pos) > 0:
-            self.fuel_needed = self.calculate_fuel_use(self.crab_horiz_pos)
-        else:
-            self.fuel_needed = {}
 
 
     def load_data_from_file (self,input_file):
@@ -58,46 +54,86 @@ class Day7():
         self.crab_data = dict(zip(*results))
         return self.crab_data
 
-    def calculate_fuel_use(self, crab_pos_data=None):
+    def calculate_fuel_use(self, crab_pos_data=None, model=None):
         """ calculate fuel units to line up crabs, per position "
             creates self.fuel_needed dict """
 
         if crab_pos_data is None:
             crab_pos_data = self.crab_horiz_pos
 
-        # get all positions, calculate fuel use for 1 unit per position
-        fuel_needed={}
+        run_part1_model = False
+        run_part2_model = False
+        if model is None or model.lower() == "part1":
+            model = "part1"
+            run_part1_model = True
+        elif model.lower() == "part2":
+            model = "part2"
+            run_part2_model = True
+        else:
+            err_mssg = "+++ERROR: calculate_fuel_use() with model must "\
+                       "be either 'part1' or 'part2'"
+            raise ValueError(err_mssg)
 
-        for this_pos in crab_pos_data.keys():
-            fuel_cost = 0
+        if run_part1_model:
+            # get all positions, calculate fuel use for 1 unit per position
+            print(f"+++INFO: making fuel calculations with Model:{model}")
+            fuel_needed={}
 
-            for k,v in crab_pos_data.items():
-                #print(f"{fuel_cost} += ({v} * abs({k}-{this_pos}))")
-                fuel_cost += (v * abs(k - this_pos))
+            for this_pos in crab_pos_data.keys():
+                fuel_cost = 0
 
-            fuel_needed[this_pos] = fuel_cost
-            self.fuel_needed = fuel_needed
+                for k,v in crab_pos_data.items():
+                    #print(f"{fuel_cost} += ({v} * abs({k}-{this_pos}))")
+                    fuel_cost += (v * abs(k - this_pos))
+
+                fuel_needed[this_pos] = fuel_cost
+                self.fuel_needed = fuel_needed
+
+        if run_part2_model:
+            # get all positions, calculate fuel use for 1 unit per position
+            print(f"+++INFO: making fuel calculations with Model:{model}")
+            fuel_needed={}
+
+            for this_pos in crab_pos_data.keys():
+                fuel_cost = 0
+
+                for k,v in crab_pos_data.items():
+                    #print(f"{fuel_cost} += ({v} * abs({k}-{this_pos}))")
+                    fuel_cost += (v * abs(k - this_pos))
+
+                fuel_needed[this_pos] = fuel_cost
+                self.fuel_needed = fuel_needed
 
         return fuel_needed
 
     def solve_part1(self):
         """ What is the least fuel cost to align the crabs """
-        
+        self.calculate_fuel_use(model="part1")
+
         if len(self.fuel_needed) == 0:
             print("+++ERROR: no data in the fuel_cost dict, nothing to do...")
             return 0
-        
+
         # --find minimum value in the fuel_cost dict and corresponding key
         #print(f"whole dict:\n{self.fuel_needed}")
         min_fuel = min(self.fuel_needed.values())
         pos_key = min(self.fuel_needed, key=self.fuel_needed.get)
-        
+
         part1_answer = f"Position:({pos_key}) :Fuel Needed:({min_fuel})"
-        print(f"+++ANSWER: {part1_answer}" )      
+        print(f"+++ANSWER: {part1_answer}" )
         self.answer_key["part 1:"]= part1_answer
+        return self.answer_key
+
+    def solve_part2(self):
+        """ What is the least fuel cost with updated fuel usage? """
+        self.calculate_fuel_use(model="part2")
+
+        if len(self.fuel_needed) == 0:
+            print("+++ERROR: no data in the fuel_cost dict, nothing to do...")
+            return 0
+
+        print("+++DEBUG: working from here ++++++++++++++++++++++++++")
 
     def get_answer_key(self):
         """ return answer key"""
         return self.answer_key
-
-
