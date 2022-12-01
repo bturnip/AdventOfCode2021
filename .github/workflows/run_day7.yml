@@ -19,3 +19,6 @@ jobs:
             
             - name: Run nosetests
               run: cd day7 && nosetests
+              
+            - name: Execute solver script
+              run: cd day7 && python solve_day7.py
