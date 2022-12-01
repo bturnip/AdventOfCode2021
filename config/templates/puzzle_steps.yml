@@ -32,10 +32,9 @@ DEV STEPS: Steps, using {DAY_NUM} as example:
             file: solve_{DAY_NUM}.py
             file: setup.cfg
             file: requirements_{DAY_NUM}.txt
-            file: {DAY_NUM}.yml (this file!)
             file: {DAY_NUM}.py
             file: tests/test_{DAY_NUM}.py
-            file: steps_{DAY_NUM}.yml
+            file: steps_{DAY_NUM}.yml (this file!)
             file: .github/workflows/run_{DAY_NUM}.yml
         AoC_data:
             file: input/input.txt
