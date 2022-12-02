@@ -14,6 +14,9 @@ class TestDay8(TestCase):
     def setUpClass(cls):
         """ Load data needed by tests """
         global dummy_input_file, sample_file, full_file
+        global sample_line_count
+        global sample_val_L3_P0_C3,sample_val_L4_P1_C2
+        global sample_val_L5_P0_C7,sample_val_L6_P1_C0 
         
         # -- input file setup        
         dummy_input_file = "foo.file"
@@ -21,7 +24,13 @@ class TestDay8(TestCase):
         sample_file = SAMPLE_FILE
         
         # verified data
-        #TODO
+        sample_line_count = 10
+        # random values cherry picked from sample file
+        # line 3, part 1, col 3
+        sample_val_L3_P0_C3 = 'bgaef'
+        sample_val_L4_P1_C2 = 'bdfgeca'
+        sample_val_L5_P0_C7 = 'fbedcg'
+        sample_val_L6_P1_C0 = 'dgbac'
 
     def test_test(self):
         """ Dummy Test to test nosetests"""
@@ -47,6 +56,20 @@ class TestDay8(TestCase):
 
 
     def test_load_from_file(self):
-        """ Testing () """
-        #TODO
-        pass
+        """ Testing load_data_from_file() """
+        test11=Day8(sample_file)
+        test_result = len(test11.segment_observations)
+        self.assertEqual(sample_line_count, test_result)
+        
+        test_result = test11.segment_observations[3][0][3]
+        self.assertEqual(sample_val_L3_P0_C3,test_result)
+
+        test_result = test11.segment_observations[4][1][2]
+        self.assertEqual(sample_val_L4_P1_C2,test_result)
+
+        test_result = test11.segment_observations[5][0][7]
+        self.assertEqual(sample_val_L5_P0_C7,test_result)
+
+        test_result = test11.segment_observations[6][1][0]
+        self.assertEqual(sample_val_L6_P1_C0,test_result)
+
