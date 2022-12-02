@@ -43,6 +43,33 @@ class Day8():
                                          [x.split('|') for x in raw_data]
                                     ]
         return self.segment_observations
+    
+    def solve_part1(self):
+        """ how many times do digits 1, 4, 7, or 8 appear in output? """
+        
+        target_count = 0
+        
+        if len(self.segment_observations) > 1:
+            part1_outputs = [x[1] for x in self.segment_observations ]
+            
+            for x in part1_outputs:
+                this_count=len([y for y in x if (len(y) ==7 or \
+                                             len(y) ==2  or \
+                                             len(y) ==3  or \
+                                             len(y) ==4)]
+                              )
+                target_count += this_count
+        else:
+            print("+++WARNING: empty segment_observations data, nothing to do...")
+            return 0
+        
+
+
+        part1_answer = f"Total count of 1,4,7,8 in outputs:[{target_count}]"
+        print(f"+++ANSWER: {part1_answer}" )
+        self.answer_key["part 1:"]= part1_answer
+
+        return self.answer_key        
 
     def get_answer_key(self):
         """ return answer key"""
