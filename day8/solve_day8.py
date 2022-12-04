@@ -14,8 +14,12 @@ print("+++INFO: starting puzzle...")
 puzzle = Day8(this_file)
 
 print("\tsolving part 1:")
-puzzle.solve_part1()
-#print(puzzle.get_answer_key())
+puzzle.solve_part1() #387
+
+print("\tsolving part 2:")
+puzzle.solve_part2() #387
+
+
 
 
 

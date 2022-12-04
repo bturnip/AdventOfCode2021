@@ -31,6 +31,8 @@ class TestDay8(TestCase):
         sample_val_L4_P1_C2 = 'bdfgeca'
         sample_val_L5_P0_C7 = 'fbedcg'
         sample_val_L6_P1_C0 = 'dgbac'
+        
+        
 
     def test_test(self):
         """ Dummy Test to test nosetests"""
