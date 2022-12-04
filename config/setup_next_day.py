@@ -6,6 +6,7 @@
 import os
 from os.path import basename, isfile
 import shutil
+from setup_config import *
 
 # --function defs----------------------------------------------------
 def check_dir (fullpath, short_name=None):
@@ -82,8 +83,7 @@ def copy_templates (day_number,target_folder):
 # --program start-----------------------------------------------------
 
 # --set variables
-YEAR='2021'
-AOC_VINTAGE= f'AdventOfCode{YEAR}'
+
 
 # ---list key: [<template file>, <destination folder>, <new_file_pattern>]
 TEMPLATE_LIST = [
