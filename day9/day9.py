@@ -10,26 +10,19 @@ class Day9():
     def __init__(self, input_file=None):
         self.input_file = input_file
         self.answer_key = {}
+        self.low_point_coords ={}
 
         if input_file is not None and isfile(input_file):
             self.heightmap = self.load_data_from_file(input_file)
         else:
-            self.heightmap = [[]]
-        '''
-        if len(self.{XXX}) > 0:
-            #TODO: fill code
-        else:
-            #TODO: fill code
-        '''
-
-
+            self.heightmap = np.array([[]])
 
     def load_data_from_file (self,input_file):
         """ loads the heightmap from file """
         # load logic:
         #  - input data is a grid of numbers
         #  - load as 2D numpy array
-        
+
         # --sanity checks ---------------------------------------------
         if not isfile(input_file):
             err_mssg = f"+++ERROR: input file [{input_file}] is not "\
@@ -40,23 +33,72 @@ class Day9():
         with open(input_file,'r') as input_stream:
             raw_data=input_stream.readlines()
         input_stream.close()
-        
+
         #--convert strings to ints and return list
         string_arr = np.array([list(x.strip()) for x in raw_data])
         return string_arr.astype(int)
-    
+
+    def set_low_point_coords (self):
+        """ Create a dict with coords and value of low points for heightmap """
+        #--sanity checks
+        if self.heightmap.size == 0:
+            print("+++ERROR: no data in the heightmap, nothing to do...")
+            return {}
+
+        num_rows, num_cols = self.heightmap.shape
+        last_col = num_cols-1
+
+        row_wise_results = {}
+
+        for r in range(0,num_rows):
+            #--calculate low points row-wise: consider left or right only
+            this_row = self.heightmap[r]
+
+            print(f'+++DEBUG: this_row: {this_row}')
+
+            for c in range(0,num_cols):
+                this_value = this_row[c]
+
+                #--compare 1st column
+                if c == 0:
+                    if this_value < this_row[c+1]:
+                        row_wise_results[r,c]=this_value
+                #--compare the 2nd through next to last cols
+                if c < last_col:
+                    if this_value < this_row[c+1]:
+                        if this_value < this_row[c-1]:
+                            row_wise_results[r,c]=this_value
+                if c == last_col:
+                    if this_value < this_row[c-1]:
+                        row_wise_results[r,c]=this_value
+            
+        print(f'+++DEBUG: row_wise_results: {row_wise_results}')
+
+
+
+
+
+
+
+
+        return self.low_point_coords
+
+
+
+
+
     def get_answer_key(self):
         """ return answer key"""
         return self.answer_key
+
 
     def solve_part1(self):
         """ What is sum(risk levels) of all low points on heightmap? """
 
         low_pt_risk_lvl_sum = 0
-        
+
         part1_answer = f"Low point risk level sum:[{low_pt_risk_lvl_sum}]"
         print(f"+++ANSWER: {part1_answer}" )
         self.answer_key["part 1:"]= part1_answer
 
         return self.answer_key
-

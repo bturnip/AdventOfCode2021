@@ -13,9 +13,20 @@ print(f"+++INFO: using {this_file}...")
 print("+++INFO: starting puzzle...")
 puzzle = Day9(this_file)
 
+print(f'+++DEBUG: puzzle.heightmap:\n {puzzle.heightmap}')
+puzzle.set_low_point_coords()
+
+print(f'+++DEBUG: : {puzzle.low_point_coords}')
+
+
+
+
+
+'''
 print("\tsolving part 1:")
 puzzle.solve_part1()
 print(puzzle.get_answer_key())
+'''
 
 
 

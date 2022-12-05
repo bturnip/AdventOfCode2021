@@ -14,6 +14,7 @@ class TestDay9(TestCase):
     def setUpClass(cls):
         """ Load data needed by tests """
         global dummy_input_file, sample_file, full_file
+        global sample_file_line_count
         
         # -- input file setup        
         dummy_input_file = "foo.file"
@@ -21,6 +22,8 @@ class TestDay9(TestCase):
         sample_file = SAMPLE_FILE
         
         # verified data
+        sample_file_line_count = 5
+        
         #TODO
 
     def test_test(self):
@@ -47,6 +50,39 @@ class TestDay9(TestCase):
 
 
     def test_load_from_file(self):
-        """ Testing () """
-        #TODO
-        pass
+        """ Testing input file load """
+        test10 = Day9(SAMPLE_FILE)
+        test_result = len(test10.heightmap)
+        self.assertEqual(sample_file_line_count,test_result)
+        #sample file should have been loaded into 2D numpy array size=50
+        self.assertEqual(50,test10.heightmap.size)
+        self.assertEqual(2,test10.heightmap.ndim)
+
+    def test_set_low_point_coords(self):
+        """ Testing set_low_point_coords() """
+        #--an empty object should return an empty dict
+        test21 = Day9()
+        self.assertEqual(0,test21.heightmap.size)
+        test_result= test21.set_low_point_coords()
+        self.assertIsInstance(test_result,dict)
+        self.assertEqual(len(test21.low_point_coords),0)
+        
+        #--testing the first row of the sample file should load two
+        #  sets of coords in the low_point_coords dict
+        #  dict should be:
+        #  {(0,1):1, (0,9):0}
+        test22 = Day9(SAMPLE_FILE)
+        test22.set_low_point_coords()
+        test_result = test22.low_point_coords
+        self.assertIsInstance(test_result,dict)
+
+        
+
+    def test_get_answer_key(self):
+        """ Testing get_answer_key() """
+        test90 = Day9()
+        test_result = test90.get_answer_key()
+        self.assertIsInstance(test_result,dict)
+        
+        
+        
