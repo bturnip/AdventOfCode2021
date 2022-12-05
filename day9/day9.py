@@ -12,23 +12,24 @@ class Day9():
         self.answer_key = {}
 
         if input_file is not None and isfile(input_file):
-            #TODO: self.{XXX} = self.load_data_from_file(input_file)
+            self.heightmap = self.load_data_from_file(input_file)
         else:
-            #TODO: fill code
-
+            self.heightmap = [[]]
+        '''
         if len(self.{XXX}) > 0:
             #TODO: fill code
         else:
             #TODO: fill code
+        '''
 
 
 
     def load_data_from_file (self,input_file):
-        """ loads the #TODO from file """
+        """ loads the heightmap from file """
         # load logic:
-        #  - 
-        # 
-
+        #  - input data is a grid of numbers
+        #  - load as 2D numpy array
+        
         # --sanity checks ---------------------------------------------
         if not isfile(input_file):
             err_mssg = f"+++ERROR: input file [{input_file}] is not "\
@@ -40,10 +41,22 @@ class Day9():
             raw_data=input_stream.readlines()
         input_stream.close()
         
-        #TODO
-        
+        #--convert strings to ints and return list
+        string_arr = np.array([list(x.strip()) for x in raw_data])
+        return string_arr.astype(int)
+    
     def get_answer_key(self):
         """ return answer key"""
         return self.answer_key
 
+    def solve_part1(self):
+        """ What is sum(risk levels) of all low points on heightmap? """
+
+        low_pt_risk_lvl_sum = 0
+        
+        part1_answer = f"Low point risk level sum:[{low_pt_risk_lvl_sum}]"
+        print(f"+++ANSWER: {part1_answer}" )
+        self.answer_key["part 1:"]= part1_answer
+
+        return self.answer_key
 
