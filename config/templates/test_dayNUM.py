@@ -50,3 +50,10 @@ class TestDay{NUM}(TestCase):
         """ Testing () """
         #TODO
         pass
+    
+    
+    def test_get_answer_key(self):
+        """ Testing get_answer_key() """
+        test90 = Day{NUM}()
+        test_result = test90.get_answer_key()
+        self.assertIsInstance(test_result,dict)
