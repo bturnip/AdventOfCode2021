@@ -1,4 +1,4 @@
-""" Advent Of Code 2021 Day {DAY_NUM} driver """
+""" Advent Of Code 2021 Day {NUM} driver """
 from {DAY_NUM} import *
 from config_{DAY_NUM} import *
 
