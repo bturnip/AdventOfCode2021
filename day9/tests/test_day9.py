@@ -45,7 +45,7 @@ class TestDay9(TestCase):
         self.assertEqual(dummy_input_file,test02.input_file)
         #-------------------------------------
         test03=Day9(sample_file)
-        self.assertIsInstance(test02,object)
+        self.assertIsInstance(test03,object)
         # -------------------------------------     
 
 
@@ -57,6 +57,9 @@ class TestDay9(TestCase):
         #sample file should have been loaded into 2D numpy array size=50
         self.assertEqual(50,test10.heightmap.size)
         self.assertEqual(2,test10.heightmap.ndim)
+        
+        test11=Day9()
+        self.assertRaises(TypeError,test11.load_data_from_file,dummy_input_file)
 
     def test_set_low_point_coords(self):
         """ Testing set_low_point_coords() """
@@ -75,6 +78,8 @@ class TestDay9(TestCase):
         test22.set_low_point_coords()
         test_result = test22.low_point_coords
         self.assertIsInstance(test_result,dict)
+        self.assertEqual(test_result[(0,1)],1)
+        self.assertEqual(test_result[(0,9)],0)
 
         
 
