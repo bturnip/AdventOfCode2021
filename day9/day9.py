@@ -55,8 +55,6 @@ class Day9():
             #--calculate low points row-wise: consider left or right only
             this_row = self.heightmap[r]
 
-            print(f'+++DEBUG: this_row: {this_row}')
-
             for c in range(0,num_cols):
                 this_value = this_row[c]
 
@@ -77,7 +75,6 @@ class Day9():
         #--take the row wise calculations and compare the up or down coords
         temp_coords={}
         for coord, coord_height in row_wise_results.items():
-            print(f'+++DEBUG: coord, coord_height: {coord},{coord_height}')
             rownum = coord[0]
             colnum = coord[1]
             #--check vals in first row, no check above
@@ -92,13 +89,9 @@ class Day9():
             if rownum == last_row:
                 if coord_height < self.heightmap[rownum - 1][colnum]:
                     temp_coords[coord] = coord_height
-        
+
         self.low_point_coords = temp_coords
         return self.low_point_coords
-
-
-
-
 
     def get_answer_key(self):
         """ return answer key"""
@@ -107,11 +100,12 @@ class Day9():
 
     def solve_part1(self):
         """ What is sum(risk levels) of all low points on heightmap? """
-
-        low_pt_risk_lvl_sum = 0
+        #--risk level is height of the low point +1
+        low_pt_risk_lvl_sum =sum(self.low_point_coords.values()) \
+                            +len(self.low_point_coords)
 
         part1_answer = f"Low point risk level sum:[{low_pt_risk_lvl_sum}]"
         print(f"+++ANSWER: {part1_answer}" )
-        self.answer_key["part 1:"]= part1_answer
+        self.answer_key["part 1"]= part1_answer
 
         return self.answer_key

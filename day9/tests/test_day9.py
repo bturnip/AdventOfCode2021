@@ -14,7 +14,7 @@ class TestDay9(TestCase):
     def setUpClass(cls):
         """ Load data needed by tests """
         global dummy_input_file, sample_file, full_file
-        global sample_file_line_count
+        global sample_file_line_count, sample_pt1_answer
         
         # -- input file setup        
         dummy_input_file = "foo.file"
@@ -23,8 +23,8 @@ class TestDay9(TestCase):
         
         # verified data
         sample_file_line_count = 5
+        sample_pt1_answer = 15
         
-        #TODO
 
     def test_test(self):
         """ Dummy Test to test nosetests"""
@@ -47,7 +47,6 @@ class TestDay9(TestCase):
         test03=Day9(sample_file)
         self.assertIsInstance(test03,object)
         # -------------------------------------     
-
 
     def test_load_from_file(self):
         """ Testing input file load """
@@ -81,13 +80,29 @@ class TestDay9(TestCase):
         self.assertEqual(test_result[(0,1)],1)
         self.assertEqual(test_result[(0,9)],0)
 
+    def test_solve_part1 (self):
+        """ Testing solve_part1() """
+        test31 = Day9(SAMPLE_FILE)
+        test31.set_low_point_coords()
+        test_result = test31.solve_part1()
+        self.assertIsInstance(test_result, dict)
         
-
+        #--test result looks like:
+        #  answer_key["part 1"] = Low point risk level sum:[{nn}]
+        #  extract and test just the "nn" numeric result
+        foo = test_result["part 1"].split(":")[1]
+        bar = int(foo.replace('[','').replace(']',''))
+        self.assertEqual(bar,sample_pt1_answer )
+        
+        
     def test_get_answer_key(self):
         """ Testing get_answer_key() """
         test90 = Day9()
         test_result = test90.get_answer_key()
         self.assertIsInstance(test_result,dict)
+        
+        
+        
         
         
         
