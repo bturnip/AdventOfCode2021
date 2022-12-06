@@ -100,6 +100,13 @@ class TestDay9(TestCase):
         test90 = Day9()
         test_result = test90.get_answer_key()
         self.assertIsInstance(test_result,dict)
+    
+    def test_map_basins(self):
+        """ Testing maps_basins() """
+        test41 = Day9()
+        test_result = test41.map_basins()
+        self.assertEqual(0,len(test_result))
+        self.assertIsInstance(test_result, set)
         
         
         
