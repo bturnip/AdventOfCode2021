@@ -6,6 +6,7 @@
 import os
 from os.path import basename, isfile
 import shutil
+from setup_config import *
 
 # --function defs----------------------------------------------------
 def check_dir (fullpath, short_name=None):
@@ -44,7 +45,7 @@ def copy_templates (day_number,target_folder):
     # [<template file>, <destination folder>, <new_file_pattern>]
     # ['puzzle_steps.yml', '{DAY_FOLDER}','steps_{DAY_NUM}.yml']
     # ------------------------------------------------------------
-    global error_count
+    error_count = 0
     for this_template in TEMPLATE_LIST:
         PROCESS_FILE = True
         #-- get src path
@@ -76,39 +77,15 @@ def copy_templates (day_number,target_folder):
                   f"---> {os.path.basename(target_file)}")
             shutil.copy(src_file,target_file)
 
-
-
-
 # --program start-----------------------------------------------------
 
-# --set variables
-YEAR='2021'
-AOC_VINTAGE= f'AdventOfCode{YEAR}'
-
-# ---list key: [<template file>, <destination folder>, <new_file_pattern>]
-TEMPLATE_LIST = [
-    ['puzzle_steps.yml', '{DAY_FOLDER}','steps_{DAY_NUM}.yml']
-    ,['setup.cfg','{DAY_FOLDER}','setup.cfg']
-    ,['config_dayNUM.py','{DAY_FOLDER}','config_{DAY_NUM}.py']
-    ,['dayNUM.py','{DAY_FOLDER}','{DAY_NUM}.py']
-    ,['solve_dayNUM.py','{DAY_FOLDER}','solve_{DAY_NUM}.py']
-    ,['requirements_dayNUM.txt','{BASEDIR}','requirements_{DAY_NUM}.txt']
-    ,['test_dayNUM.py','{DAY_FOLDER}/tests','test_{DAY_NUM}.py']
-    ,['dayNUM.yml','{BASEDIR}/.github/workflows','run_{DAY_NUM}.yml']
-    ]
-
-error_count = 0
-
-
 # --------------------------------------------------------------------
-STEP="set paths and check"
+STEP="check paths imported from setup_config"
 print(f"+++INFO:{STEP}")
 # --------------------------------------------------------------------
-BASEDIR = f'/home/bturnip/Documents/Code/python/advent_of_code/{AOC_VINTAGE}'
-TEMPLATES_DIR = f'{BASEDIR}/config/templates'
-
 check_dir(BASEDIR,"Base path")
-check_dir(TEMPLATES_DIR)
+check_dir(TEMPLATES_DIR, "Templates")
+check_dir(ARCHIVE_DIR, "Archive storage")
 
 
 # --------------------------------------------------------------------
@@ -116,6 +93,25 @@ STEP="get dir contents, set next day"
 print(f"+++INFO:{STEP}")
 # --------------------------------------------------------------------
 target_day = set_next_day_number()
+
+
+# --------------------------------------------------------------------
+STEP=f"archive entire AoC {YEAR} folder"
+print(f"+++INFO:{STEP}")
+# --------------------------------------------------------------------
+archive_name=f'{ARCHIVE_DIR}{AOC_VINTAGE}_day{target_day-1}'
+
+shutil.make_archive(archive_name, 'zip', BASEDIR)
+
+zipped_file = f'{archive_name}.zip'
+
+if not isfile(zipped_file):
+    print(f"+++ERROR: Did not find {basename(zipped_file)} in \n" \
+          f"+++ERROR: ARCHIVE_DIR: {ARCHIVE_DIR} \n" \
+          f"+++ERROR: Archive manually.")
+else:
+    print(f"+++INFO:{basename(zipped_file)} created...")
+
 
 # --------------------------------------------------------------------
 STEP="set target folder, create directory structure"
@@ -141,11 +137,7 @@ STEP="copy templates"
 print(f"+++INFO:{STEP}")
 # --------------------------------------------------------------------
 copy_templates(target_day,target_folder)
-#print("+++INFO: copying steps YAML file")
-#src_path = PUZZLE_STEPS
-#dst_path = f'{target_folder}/steps_day{str(target_day)}.yml'
-#shutil.copy(src_path, dst_path)
 
 # ready to rock and roll
 # --------------------------------------------------------------------
-print("+++INFO: folders ready, next step: git pull and branch!")
+print(f"+++INFO: Day{target_day} folders ready, next step: git pull and branch!")
