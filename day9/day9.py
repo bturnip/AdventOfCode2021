@@ -11,7 +11,7 @@ class Day9():
         self.input_file = input_file
         self.answer_key = {}
         self.low_point_coords ={}
-        self.basin_map = {}
+        self.basin_sizes = {}
         self.hm_num_rows = 0
         self.hm_num_cols = 0
         self.hm_last_row = 0
@@ -105,59 +105,52 @@ class Day9():
 
     def map_basins(self):
         """ maps all basins connected to each low point """
-        #--start with each low point
-        #  - row wise, add each element to the left or right until a value of 9 is
-        #    reached. elements to the left, right, up, and down
-        #--sanity checks
-        if self.heightmap.size == 0:
-            print("+++ERROR: no data in the heightmap, nothing to do...")
-            return set()
-
-        row_wise_results = set()
+        #--start with each low point coord
+        #  send the height map and low point to the flood fill function
+        #  - count the -1 values after flood fill has completed
+        #    record the low point coord and connected points
         for this_coord in self.low_point_coords.keys():
-            print(f'+++DEBUG: this_coord: {this_coord}++++++++++++++++')
-            row_wise_results = set()
-            
-            rownum = this_coord[0]
-            colnum = this_coord[1]
-            
-            #--go right, add elements that go in this basin
-            next_val = -1
-            for c in range (colnum,self.hm_num_cols):
-                if self.heightmap[rownum][c] == 9:
-                    break
-                row_wise_results.add((rownum,c))
-                print(f'+++DEBUG: adding: {(rownum,c)}')
-            
-            #--go left, do not count starting point
-            if colnum > 0:
-                for c in range (colnum-1, -1,-1):
-                    if self.heightmap[rownum][c] == 9:
-                        break
-                    row_wise_results.add((rownum,c))
-                    print(f'+++DEBUG: adding: {(rownum,c)}')
- 
-                    
-            print(f'+++DEBUG: row_wise_results: {row_wise_results}')
-            #TODO go column wise down, then check left/right
-            #TOOD go column wise up, then check for left right
-        
-                
-                 
-            
-            
-            
-            
-            
-            
-            
+            this_basin = self.heightmap.copy()
+            self.flood_fill(field = this_basin \
+                            ,x = this_coord[1] \
+                            ,y = this_coord[0] \
+                            ,border_value =  9 \
+                            ,fill_value = -1)
+            basin_count = np.count_nonzero(this_basin == -1)
+            self.basin_sizes[this_coord] = basin_count
 
 
+    def flood_fill(self,field, x, y, border_value, fill_value):
+        """ Take a given field and start point, flood fill with fill value  """
+        #--Flood fill algorithm example from here:
+        #--https://github.com/ramza/PythonTuts
+
+        #--this version needs to fill any value that isn't a 9, instead
+        #  of a "bucket fill" method original algoritm solved
+
+        #--the flood fill has 4 parts
+        #--firstly, make sure the x and y are inbounds
+        if x < 0 or x >= len(field[0]) or y < 0 or y >= len(field):
+            return
+
+        #--secondly, check if the current position equals the old value
+        if field[y][x] == border_value or field[y][x] == fill_value:
+            return
+
+        #--thirdly, set the current position to the new value
+        field[y][x] = fill_value
+
+        #--fourthly, attempt to fill the neighboring positions
+        self.flood_fill(field,x+1, y, border_value, fill_value)
+        self.flood_fill(field,x-1, y, border_value, fill_value)
+        self.flood_fill(field,x, y+1, border_value, fill_value)
+        self.flood_fill(field,x, y-1, border_value, fill_value)
 
 
     def get_answer_key(self):
         """ return answer key"""
         return self.answer_key
+
 
     def solve_part1(self):
         """ What is sum(risk levels) of all low points on heightmap? """
@@ -170,3 +163,17 @@ class Day9():
         self.answer_key["part 1"]= part1_answer
 
         return self.answer_key
+
+
+    def solve_part2(self):
+        """ What is the product of the 3 largest basin sizes? """
+        self.map_basins()
+        sizes = np.array(sorted(self.basin_sizes.values(),reverse=True))
+        top3_product = np.prod(sizes[0:2])
+
+        part2_answer = f"Product of 3 largest basin sizes:[{top3_product}]"
+        print(f"+++ANSWER: {part2_answer}" )
+        self.answer_key["part 2"]= part2_answer
+
+        return self.answer_key
+
