@@ -169,7 +169,7 @@ class Day9():
         """ What is the product of the 3 largest basin sizes? """
         self.map_basins()
         sizes = np.array(sorted(self.basin_sizes.values(),reverse=True))
-        top3_product = np.prod(sizes[0:2])
+        top3_product = np.prod(sizes[0:3])
 
         part2_answer = f"Product of 3 largest basin sizes:[{top3_product}]"
         print(f"+++ANSWER: {part2_answer}" )
