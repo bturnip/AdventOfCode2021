@@ -5,7 +5,7 @@ from os.path import isfile
 import numpy as np
 
 class Day{NUM}():
-    """ 2021 Advent of Code puzzle for Day 6 """
+    """ 2021 Advent of Code puzzle for Day{NUM} """
 
     def __init__(self, input_file=None):
         self.input_file = input_file
