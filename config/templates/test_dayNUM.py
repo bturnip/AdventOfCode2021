@@ -14,6 +14,7 @@ class TestDay{NUM}(TestCase):
     def setUpClass(cls):
         """ Load data needed by tests """
         global dummy_input_file, sample_file, full_file
+        global sample_file_line_count, part1_sample_answer, part2_sample_answer
         
         # -- input file setup        
         dummy_input_file = "foo.file"
@@ -21,7 +22,9 @@ class TestDay{NUM}(TestCase):
         sample_file = SAMPLE_FILE
         
         # verified data
-        #TODO
+        sample_file_line_count = 10
+        part1_sample_answer = #TODO
+        part2_sample_answer = #TODO
 
     def test_test(self):
         """ Dummy Test to test nosetests"""
@@ -57,3 +60,12 @@ class TestDay{NUM}(TestCase):
         test90 = Day{NUM}()
         test_result = test90.get_answer_key()
         self.assertIsInstance(test_result,dict)
+        
+        test91 = Day{NUM}(sample_file)
+        results = test91.solve_part1()
+        self.assertEqual(results,part1_sample_answer)
+        
+        test92 = Day{NUM}(sample_file)
+        results = test92.solve_part2()
+        self.assertEqual(results,part2_sample_answer)
+        
