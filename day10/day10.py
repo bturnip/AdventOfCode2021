@@ -12,22 +12,15 @@ class Day10():
         self.answer_key = {}
 
         if input_file is not None and isfile(input_file):
-            #TODO: self.{XXX} = self.load_data_from_file(input_file)
+            self.input_data = self.load_data_from_file(input_file)
         else:
-            #TODO: fill code
-
-        if len(self.{XXX}) > 0:
-            #TODO: fill code
-        else:
-            #TODO: fill code
-
+            self.input_data = []
 
 
     def load_data_from_file (self,input_file):
         """ loads the #TODO from file """
         # load logic:
-        #  - 
-        # 
+        #  - raw load, only process in other functions defs
 
         # --sanity checks ---------------------------------------------
         if not isfile(input_file):
@@ -39,9 +32,12 @@ class Day10():
         with open(input_file,'r') as input_stream:
             raw_data=input_stream.readlines()
         input_stream.close()
-        
-        #TODO
-        
+
+
+    def solve_part1(self):
+        """ TODO: enter part 1 question here """
+        pass
+
     def get_answer_key(self):
         """ return answer key"""
         return self.answer_key
