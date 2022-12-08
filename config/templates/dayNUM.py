@@ -41,7 +41,11 @@ class Day{NUM}():
         input_stream.close()
         
         #TODO
-        
+
+    def solve_part1(self):
+        """ TODO: enter part 1 question here """
+        pass
+
     def get_answer_key(self):
         """ return answer key"""
         return self.answer_key
