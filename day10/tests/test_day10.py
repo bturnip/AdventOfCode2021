@@ -14,6 +14,7 @@ class TestDay10(TestCase):
     def setUpClass(cls):
         """ Load data needed by tests """
         global dummy_input_file, sample_file, full_file
+        global sample_file_line_count
         
         # -- input file setup        
         dummy_input_file = "foo.file"
@@ -21,7 +22,7 @@ class TestDay10(TestCase):
         sample_file = SAMPLE_FILE
         
         # verified data
-        #TODO
+        sample_file_line_count = 10
 
     def test_test(self):
         """ Dummy Test to test nosetests"""
@@ -47,9 +48,11 @@ class TestDay10(TestCase):
 
 
     def test_load_from_file(self):
-        """ Testing () """
-        #TODO
-        pass
+        """ Testing load_data_from_file() """
+        test10=Day10(sample_file)
+        test_result = len(test10.input_data)
+        self.assertEqual(test_result, sample_file_line_count)
+        
     
     
     def test_get_answer_key(self):
