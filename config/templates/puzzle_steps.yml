@@ -57,7 +57,7 @@ DEV STEPS: Steps, using {DAY_NUM} as example:
     12: Prep for pull request:
         code: git checkout main
         code: git pull
-        code: git checkout my-new-branch
+        code: git checkout {DAY_NUM}}
         code: git merge main
         For any conflicts or errors:
             - <fix any merge conflicts>
