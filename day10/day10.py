@@ -87,58 +87,63 @@ class Day10():
         self.answer_key["part 1"]= part1_answer
         return part1_score
 
+    def autocomplete_line(self,data_in):
+        """ parses data_in, returns str that completes it bracket-wise """
+        # if the parse line returns '', indicating an incomplete string:
+        # process the string starting from the end, building the string
+        # needed to close all brackets
+        if self.parse_line(data_in) == '':
+            data= data_in.strip()
+            completion_data = []
+            this_stack=[]
+            #--reverse the string and start stack processing
+            for c in data[::-1]:
+                #--closing bracket
+                if c in self.close_b:
+                    #--does this match the top of the stack?
+                    if len(this_stack) > 0:
+                        if this_stack[-1] == self.bracket_dict[c]:
+                            this_stack.pop()
+                        else:
+                            this_stack.append(c)
+                    else:
+                        this_stack.append(c)
+                #--opening bracket
+                if c in self.open_b:
+                    #does this match the top of the stack?
+                    if len(this_stack) > 0:
+                        if c == self.bracket_dict[this_stack[-1]]:
+                            this_stack.pop()
+                    else:
+                        completion_data.append(self.bracket_dict[c])
+            return ''.join(completion_data)
+        return
+
+
     def solve_part2(self):
         """ What is the middle score of the automcomplete series? """
         part2_score = 0
-        # for all lines
-        # parse line
-        #if value returned is ''
-        # figure out completion string
-        # score and store completion string
         part2_scores = []
+
+        #--score all lines
         for this_line in self.input_data:
-            if self.parse_line(this_line) == '':
-                data= this_line.strip()
-                print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
-                print(f'+++DEBUG: incomplete_line: {data}')
-                this_stack = []
-                completion_data = []
-                #--reverse the string and start stack processing
-                for c in data[::-1]:
-                    # ~ print(f'+++DEBUG: stack start of cycle: {this_stack}')
-                    
-                    #--closing bracket
-                    if c in self.close_b:
-                        #--does this match the top of the stack?
-                        if len(this_stack) > 0:
-                            if this_stack[-1] == self.bracket_dict[c]:
-                                this_stack.pop()
-                            else:
-                                this_stack.append(c)
-                        else:
-                            this_stack.append(c)
-                    #--opening bracket
-                    if c in self.open_b:
-                        #does this match the top of the stack?
-                        if len(this_stack) > 0:
-                            if c == self.bracket_dict[this_stack[-1]]:
-                                this_stack.pop()
-                        else:
-                            completion_data.append(self.bracket_dict[c])
-                            
-                    # ~ print(f'+++DEBUG: c: {c}')
-                    # ~ print(f'+++DEBUG: stack end of cycle: {this_stack}')
-                    # ~ print(f'+++DEBUG: completion_data: {completion_data}')
-                    # ~ print("=========================================================")
+            this_score = 0
+            completion_str = self.autocomplete_line(this_line)
+            # ~ print(f'+++DEBUG: completion_str: {completion_str}')
+            if completion_str is not None:
                 
-                completion_str=''.join(completion_data)   
-                print(f'+++DEBUG: completion_str: {completion_str}') 
-                
-
-
-
-
-
+                for c in completion_str:
+                    this_score *=5
+                    this_score += self.part2_points_dict[c]
+                part2_scores.append(this_score)
+        
+        #--sort scores and choose the middle value
+        idx = len(part2_scores)//2
+        part2_score = sorted(part2_scores)[idx]
+        
+        part2_answer = f"Autocomplete middle score:[{part2_score}]"
+        print(f"+++ANSWER: {part2_answer}" )
+        self.answer_key["part 2"]= part2_answer        
 
         return part2_score
 
@@ -146,5 +151,3 @@ class Day10():
     def get_answer_key(self):
         """ return answer key"""
         return self.answer_key
-
-

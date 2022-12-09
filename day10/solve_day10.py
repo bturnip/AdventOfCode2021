@@ -13,18 +13,10 @@ print(f"+++INFO: using {this_file}...")
 print("+++INFO: starting puzzle...")
 puzzle = Day10(this_file)
 
+print("+++INFO: solving part 1:")
+pt1= puzzle.solve_part1()
 
-print("\tsolving part 1:")
-puzzle.solve_part1()
-#print(puzzle.get_answer_key())
+print("+++INFO: solving part 2:")
+pt2= puzzle.solve_part2()
 
-
-
-
-
-
-
-
-
-
-
+print(f"+++INFO: full answer key:\n{puzzle.get_answer_key()}")
