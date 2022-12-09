@@ -9,7 +9,7 @@ DEV STEPS: Steps, using {DAY_NUM} as example:
         Confirm with:
             code: git branch
         To make and checkout new branch:
-            code: git checkout -b my-new-branch
+            code: git checkout -b {DAY_NUM}
     03: [SCRIPTED]create folders under BASEDIR:
             dir: ./{DAY_NUM}
             dir: ./{DAY_NUM}/input_files
@@ -42,7 +42,7 @@ DEV STEPS: Steps, using {DAY_NUM} as example:
     06: get branch initialized and push
         code: git add file1 dir2/file2 
         code: git commit -m "{DAY_NUM}: initial commit"
-        code: git push -u origin my-new-branch 
+        code: git push -u origin {DAY_NUM} 
             NB: this is only need the first time
     08: get Github Actions working:
         write the minimal code to get a successful github action build
@@ -73,6 +73,6 @@ DEV STEPS: Steps, using {DAY_NUM} as example:
             code: git checkout main
             code: git pull
         - cleanup by deleting old branch
-            code: git branch -d my-new-branch
+            code: git branch -d {DAY_NUM}
         - create and checkout a new branch for next day's puzzle
-            code: git checkout -b my-next-branch
+            code: git checkout -b {NEXT_DAY_NUM}
