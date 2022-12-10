@@ -12,22 +12,20 @@ class Day11():
         self.answer_key = {}
 
         if input_file is not None and isfile(input_file):
-            #TODO: self.{XXX} = self.load_data_from_file(input_file)
+            self.orig_input = self.load_data_from_file(input_file)
+            self.input_working_copy = self.orig_input.copy()
+        else:
+            self.orig_input = np.array([[]])
+
+        if len(self.orig_input) > 0:
+            #TODO: fill code
+            pass
         else:
             #TODO: fill code
+            pass
 
-        if len(self.{XXX}) > 0:
-            #TODO: fill code
-        else:
-            #TODO: fill code
-
-
-
-    def load_data_from_file (self,input_file):
+    def load_data_from_file(self,input_file):
         """ loads the #TODO from file """
-        # load logic:
-        #  - 
-        # 
 
         # --sanity checks ---------------------------------------------
         if not isfile(input_file):
@@ -39,18 +37,23 @@ class Day11():
         with open(input_file,'r') as input_stream:
             raw_data=input_stream.readlines()
         input_stream.close()
-        
-        #TODO
+
+        data_out = [list(x.rstrip()) for x in raw_data]
+
+        return np.array(data_out)
+
+    def model_turn(self,):
+        """ Function doc """
 
     def solve_part1(self):
         """ TODO: enter part 1 question here """
         part1_score = 0
         return part1_score
-        
+
     def solve_part2(self):
         """ TODO: enter part 2 question here """
         part2_score = 0
-        return part2_score 
+        return part2_score
 
     def get_answer_key(self):
         """ return answer key"""
