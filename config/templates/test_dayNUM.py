@@ -45,7 +45,7 @@ class TestDay{NUM}(TestCase):
         self.assertEqual(dummy_input_file,test02.input_file)
         #-------------------------------------
         test03=Day{NUM}(sample_file)
-        self.assertIsInstance(test02,object)
+        self.assertIsInstance(test03,object)
         # -------------------------------------     
 
 
