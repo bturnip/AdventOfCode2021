@@ -75,7 +75,19 @@ class TestDay11(TestCase):
         test_result = test13.orig_input.size
         self.assertEqual(sample_file_size, test_result)
 
-
+    def test_model_turn(self):
+        """ Testing model_turn() """
+        #--test input: 3x3 grid of numbers 0-8
+        #  total sum = n(n+1)/2 = 8(9)/2 = 36
+        test_input = np.arange(9).reshape(3,3)
+        test20=Day11()
+        output=test20.model_turn(test_input)
+        #--expected output 3x3 grid of numbers 1-9
+        #  totatl sum = sum-of-series(9)
+        expected_output = 45
+        test_output = np.sum(output)
+        self.assertEqual(expected_output,test_output)
+        
     def test_get_answer_key(self):
         """ Testing get_answer_key() """
         test90 = Day11()
