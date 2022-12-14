@@ -46,56 +46,51 @@ class Day11():
     def model_turn(self):
         """ Model 1 turn of dumbo energy increasing """
         #--increase energy levels
-        # ~ print(f'+++DEBUG: input array: {input}')
         self.input_working_copy = self.input_working_copy + 1
+
         #--if we have energy levels to flash, process all flash chains
         if 10 in self.input_working_copy:
             self.model_flashes()
 
     def model_flashes(self):
         """ Process dumbo flashing """
-        while 10 in self.input_working_copy:
+        #--while enery level > 9 anywhere in grid:
+        #  - gather list of coords and call_flash_coord on each one
+        while np.count_nonzero(self.input_working_copy > 9):
             this_flash = np.where(self.input_working_copy>=10)
             flash_coords = list(zip(this_flash[0],this_flash[1]))
-            #print(f'+++DEBUG: flash_coords: {flash_coords}')
-    
-            #--for each flash coord
-            #  - set coord to zero
-            #  - for each neighbor <> 0, increment
+
             for this_coord in flash_coords:
-                print(f'+++DEBUG: calling flash_coord({this_coord})')
+                 # ~ print(f'+++DEBUG: calling flash_coord({this_coord})')
                 self.flash_coord(this_coord)
 
     def flash_coord (self, coord):
         """ Set coord to zero and increment all non-zero neighbors """
-        #print(f'+++DEBUG: starting work:\n {self.input_working_copy}')
         row,col = coord
-        self.input_working_copy[row][col]=0
-        self.total_flashes_100_turns +=1
-        
+        if self.input_working_copy[row][col] != 0:
+            self.total_flashes_100_turns +=1
+            self.input_working_copy[row][col]=0
+
         for r in range(max(row-1,0) \
                        ,min(row+2,self.row_out_of_bounds)):
             for c in range(max(col-1,0) \
                            ,min(col+2, self.col_out_of_bounds)):
-                #print(f'+++DEBUG: target coord: {r},{c}')
                 if self.input_working_copy[r][c] > 0:
                     self.input_working_copy[r][c] += 1
-        #print(f'+++DEBUG: flash_coord complete:\n {self.input_working_copy}')
 
 
+    def solve_part1(self, num_turns=None):
+        """ How many total flashes are there after 100 steps? """
+        if num_turns is None or type(num_turns) != int:
+            num_turns = 100
 
-
-
-
-
-
-
-
-    def solve_part1(self):
-        """ TODO: enter part 1 question here """
-        for i in range(0,100):
+        for i in range(1,num_turns+1):
             self.model_turn()
-            print(f"turn {i}:")
+            print(f"turn {i}: flashes:{self.total_flashes_100_turns}")
+
+        part1_answer = f'Total flashes after 100 steps:[{self.total_flashes_100_turns}]'
+        self.answer_key["part 1"]=part1_answer
+
         return self.total_flashes_100_turns
 
     def solve_part2(self):
@@ -106,5 +101,3 @@ class Day11():
     def get_answer_key(self):
         """ return answer key"""
         return self.answer_key
-
-
