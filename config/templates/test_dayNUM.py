@@ -50,9 +50,12 @@ class TestDay{NUM}(TestCase):
 
 
     def test_load_from_file(self):
-        """ Testing () """
-        #TODO
-        pass
+        """ Testing load_data_from_file() """
+        test10=Day{NUM}()
+        self.assertRaises(TypeError,test10.load_data_from_file,dummy_input_file)
+        
+        
+        
     
     
     def test_get_answer_key(self):
