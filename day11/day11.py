@@ -112,14 +112,8 @@ class Day11():
         if i==turn_limit:
             print(f"+++WARNING: no all-flashing turn found after {turn_limit} turns...")
         else:
-            #-- I have no idea why, but my grids have an all-flash exactly
-            #   100 turns quicker than the accepted answer.  I found the +100
-            #   quirk testing the sample data and it worked on the actual
-            #   input as well.  
-            #   It can't be coincidence that the 10x10 grid flashes (10x10)
-            #   turns sooner in my code.  Feels cheap, but moving on...
-            faked_answer = i+100
-            part2_answer = f'Found all-flashing turn on turn #{faked_answer}'
+
+            part2_answer = f'Found all-flashing turn on turn #{i}'
             self.answer_key['part 2']=part2_answer
         return i
 
