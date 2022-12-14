@@ -18,12 +18,9 @@ class Day11():
         else:
             self.orig_input = np.array([[]])
 
-        if len(self.orig_input) > 0:
-            self.row_out_of_bounds = self.orig_input.shape[0]
-            self.col_out_of_bounds = self.orig_input.shape[1]
-        else:
-            self.last_row = 0
-            self.last_col = 0
+        self.row_out_of_bounds = self.orig_input.shape[0]
+        self.col_out_of_bounds = self.orig_input.shape[1]
+ 
 
     def load_data_from_file(self,input_file):
         """ loads the #TODO from file """
