@@ -19,6 +19,7 @@ print(f'+++DEBUG: pt1: {pt1}')
 
 print("+++INFO: solving part 2:")
 pt2= puzzle.solve_part2()
+print(f'+++DEBUG: pt2: {pt2}') 
 
 print(f"+++INFO: full answer key:\n{puzzle.get_answer_key()}")
 
