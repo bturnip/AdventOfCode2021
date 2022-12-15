@@ -38,7 +38,6 @@ def set_next_day_number():
     target += 1
     return target
 
-
 def copy_templates (day_number,target_folder):
     """ Process TEMPLATE_DESTINATIONS """
     # template list entries look like:
@@ -65,7 +64,7 @@ def copy_templates (day_number,target_folder):
                       .replace("{BASEDIR}",BASEDIR)
 
             t_file = str(this_template[2]).replace("{DAY_NUM}","day"+str(day_number))
-            target_file = f'{t_folder}/{t_file}'
+            target_file = f'{t_folder}/{t_file}.template'
 
             #-- check target, do not overwrite
             if isfile(target_file):
@@ -137,6 +136,37 @@ STEP="copy templates"
 print(f"+++INFO:{STEP}")
 # --------------------------------------------------------------------
 copy_templates(target_day,target_folder)
+
+
+# --------------------------------------------------------------------
+STEP="populate templates with day info"
+print(f"+++INFO:{STEP}")
+# --------------------------------------------------------------------
+# we have target_day, target_folder
+for this_template in TEMPLATE_LIST:
+    t_folder = str(this_template[1])                  \
+              .replace("{DAY_FOLDER}",target_folder)  \
+              .replace("{BASEDIR}",BASEDIR)
+
+    t_file = str(this_template[2]).replace("{DAY_NUM}","day"+str(target_day))
+    target_file = f'{t_folder}/{t_file}.template'
+    
+    output_file = str(target_file.replace(".template",""))
+    
+    file_in = open(target_file,"rt")
+    file_out = open(output_file,"wt")
+    
+    print(f"\t- populating {os.path.basename(output_file)} " )
+    for line in file_in:
+        file_out.write(line.replace("{DAY_NUM}","day"+str(target_day)) \
+                           .replace("{NUM}",str(target_day)) \
+                           .replace("{NEXT_DAY_NUM}","day"+str(target_day + 1))
+                       )
+    file_in.close()
+    file_out.close()
+    
+    #TODO: rm template files
+
 
 # ready to rock and roll
 # --------------------------------------------------------------------
