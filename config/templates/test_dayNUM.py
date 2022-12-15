@@ -45,14 +45,17 @@ class TestDay{NUM}(TestCase):
         self.assertEqual(dummy_input_file,test02.input_file)
         #-------------------------------------
         test03=Day{NUM}(sample_file)
-        self.assertIsInstance(test02,object)
+        self.assertIsInstance(test03,object)
         # -------------------------------------     
 
 
     def test_load_from_file(self):
-        """ Testing () """
-        #TODO
-        pass
+        """ Testing load_data_from_file() """
+        test10=Day{NUM}()
+        self.assertRaises(TypeError,test10.load_data_from_file,dummy_input_file)
+        
+        
+        
     
     
     def test_get_answer_key(self):
