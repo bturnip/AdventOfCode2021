@@ -36,7 +36,7 @@ class Day{NUM}():
             raise TypeError(err_mssg)
 
         # -- parse input file
-        with open(input_file,'r') as input_stream:
+        with open(input_file,'r',encoding="utf-8") as input_stream:
             raw_data=input_stream.readlines()
         input_stream.close()
         
