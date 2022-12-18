@@ -26,7 +26,7 @@ DEV STEPS: Steps, using {DAY_NUM} as example:
             file: requirements_{DAY_NUM}.txt
         in_dir: BASEDIR/.github/workflows:
             file: run_{DAY_NUM}.yml
-    05: populate files:
+    05: [SCRIPTED]populate files:
             These files have stubbed data and need to be updated
             file: config_{DAY_NUM}.py
             file: solve_{DAY_NUM}.py
@@ -36,7 +36,7 @@ DEV STEPS: Steps, using {DAY_NUM} as example:
             file: tests/test_{DAY_NUM}.py
             file: steps_{DAY_NUM}.yml (this file!)
             file: .github/workflows/run_{DAY_NUM}.yml
-        AoC_data:
+    05b: AoC_data:
             file: input/input.txt
             file: <sample files as needed>
     06: get branch initialized and push
