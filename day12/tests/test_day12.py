@@ -62,7 +62,24 @@ class TestDay12(TestCase):
 
     def test_build_cave_list(self):
         """ Testing build_cave_list() """
-        test20 = Day12(sample_file)
+        test_list = ['ABE-betty','betty-CARLA','CARLA-dave']
+        test20=Day12()
+
+        #-- should build a list of 4 caves
+        test20.build_cave_list(test_list)
+        expected_len = 4
+        test_len = len(test20.cave_list)
+        self.assertEqual(expected_len, test_len)
+
+        #-- cave "ABE" should have a single connection "betty"
+        idx=test20.get_cave_index_by_name('ABE')
+        expected_result="betty"
+        test_result=test20.cave_list[idx].connects_to[0]
+        self.assertEqual(expected_result,test_result)
+
+        expected_result = 1
+        test_result = len(test20.cave_list[idx].connects_to)
+        self.assertEqual(expected_result,test_result)
 
 
     def test_get_cave_index_by_name(self):
@@ -77,6 +94,11 @@ class TestDay12(TestCase):
             result_idx = test30.get_cave_index_by_name(test_name)
         self.assertEqual(test_idx, result_idx)
 
+
+    def test_build_cave_paths_pt1(self):
+        """ Testing build_cave_paths_pt1() """
+        
+        
 
     def test_get_answer_key(self):
         """ Testing get_answer_key() """
@@ -106,7 +128,7 @@ class TestDay12(TestCase):
         self.assertIsInstance(test101,Cave)
         self.assertEqual("XS",test101.name)
         self.assertEqual("big",test101.cave_size)
-        
+
         test102=Cave("foo")
         self.assertEqual("foo",test102.get_name())
 

@@ -21,6 +21,7 @@ class Cave():
                 self.connects_to = connection
             if type(connection) == str:
                 self.connects_to.append(connection)
+
     def __repr__(self):
         return self.name
 
@@ -48,6 +49,7 @@ class Day12():
     def __init__(self, input_file=None):
         self.input_file = input_file
         self.cave_list = []
+        self.cave_paths_pt1 = []
         self.answer_key = {}
 
         if input_file is not None and isfile(input_file):
@@ -75,7 +77,6 @@ class Day12():
 
         return [x.rstrip() for x in raw_data]
 
-
     def get_cave_index_by_name(self,target_name):
         """ returns index of self.cave_list for target_name """
         if len(self.cave_list) == 0 \
@@ -86,6 +87,61 @@ class Day12():
                            if obj.name == target_name)\
                       ,None)
         return self.cave_list.index(result)
+
+
+    def build_cave_paths_pt1(self,caves=None):
+        """
+        Builds a list of paths from start to end that follow pt1 rules
+        """
+        #--Path Rules
+        #  Start at "start" and discover all paths to "end"
+        #  Big size caves can be traversed multiple times
+        #  Small size caves can only be traversed once
+        #  Start and End are both small size caves
+        if caves is None:
+            caves = self.cave_list
+        
+        curr_path = ["start"]
+        curr_path = self.get_cave_path(curr_path)
+        
+
+   
+                
+    def get_cave_path(self,curr_path):
+        """
+        Func to be called recursively
+        """
+        path_data = curr_path.copy()
+        
+        while len(path_data) > 0:
+            idx = self.get_cave_index_by_name(curr_path[-1])
+            if idx < 0:
+                return
+            
+            next_conns = self.
+        for this_conn in next_conns:
+            print(f'+++DEBUG: this_conn: {this_conn}')
+            #--small cave twice, reject path
+            if this_conn in curr_path and this_conn.lower() == this_conn:
+                return
+            #-- end path, return completed path
+            if this_conn == "end":
+                curr_path.append(this_conn)
+                print(f'+++DEBUG: curr_path: {curr_path}')
+                return curr_path
+            print(f'+++DEBUG: adding this_conn: {this_conn}')
+            curr_path.append(this_conn)
+            next_conns.reverse()
+            print(f'+++DEBUG: next_conns: {next_conns}')
+            next_conns.pop()
+            print(f'+++DEBUG: next_conns after pop: {next_conns}')
+            
+            self.get_cave_path(curr_path)
+
+        print(f'+++DEBUG: bottom: {curr_path}')
+        return curr_path
+
+
 
 
     def build_cave_list(self, input_list=None):
@@ -119,6 +175,8 @@ class Day12():
         small caves at most once?
         """
         part1_score = 0
+        self.build_cave_paths_pt1()
+
         return part1_score
 
 

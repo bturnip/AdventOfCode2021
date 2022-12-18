@@ -13,15 +13,16 @@ print(f"+++INFO: using {this_file}...")
 print("+++INFO: starting puzzle...\n")
 puzzle = Day12(this_file)
 
-'''
+
 print("+++INFO: solving part 1:")
 pt1= puzzle.solve_part1()
 
+'''
 print("+++INFO: solving part 2:")
 pt2= puzzle.solve_part2()
 
 print(f"+++INFO: full answer key:\n{puzzle.get_answer_key()}")
 '''
 
-print(f'+++SOLVE: puzzle.input_data:\n {puzzle.input_data}')
-print(f'+++SOLVE: puzzle.cave_list:\n {[c.get_stats() for c in puzzle.cave_list]}')
+# ~ print(f'+++SOLVE: puzzle.input_data:\n {puzzle.input_data}')
+# ~ print(f'+++SOLVE: puzzle.cave_list:\n {[c.get_stats() for c in puzzle.cave_list]}')
