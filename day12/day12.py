@@ -2,7 +2,7 @@
 # suppress specific pylint checks (http://pylint-messages.wikidot.com/all-codes)
 # pylint: disable=R1721, C0103, C0123
 from os.path import isfile
-#import numpy as np
+
 
 class Cave():
     """ Caves are fancy nodes """
@@ -10,11 +10,6 @@ class Cave():
 
         self.name = cave_name
         self.connects_to = []
-
-        if cave_name.upper() == cave_name:
-            self.cave_size = "big"
-        else:
-            self.cave_size = "small"
 
         if connection is not None:
             if type(connection) == list:
@@ -49,7 +44,6 @@ class Day12():
     def __init__(self, input_file=None):
         self.input_file = input_file
         self.cave_list = []
-        self.cave_paths_pt1 = []
         self.answer_key = {}
 
         if input_file is not None and isfile(input_file):
@@ -59,7 +53,6 @@ class Day12():
 
         if len(self.input_data)>0:
             self.cave_list = self.build_cave_list()
-
 
     def load_data_from_file (self,input_file):
         """ loads the list of cave paths from file """
@@ -88,62 +81,6 @@ class Day12():
                       ,None)
         return self.cave_list.index(result)
 
-
-    def build_cave_paths_pt1(self,caves=None):
-        """
-        Builds a list of paths from start to end that follow pt1 rules
-        """
-        #--Path Rules
-        #  Start at "start" and discover all paths to "end"
-        #  Big size caves can be traversed multiple times
-        #  Small size caves can only be traversed once
-        #  Start and End are both small size caves
-        if caves is None:
-            caves = self.cave_list
-        
-        curr_path = ["start"]
-        curr_path = self.get_cave_path(curr_path)
-        
-
-   
-                
-    def get_cave_path(self,curr_path):
-        """
-        Func to be called recursively
-        """
-        path_data = curr_path.copy()
-        
-        while len(path_data) > 0:
-            idx = self.get_cave_index_by_name(curr_path[-1])
-            if idx < 0:
-                return
-            
-            next_conns = self.
-        for this_conn in next_conns:
-            print(f'+++DEBUG: this_conn: {this_conn}')
-            #--small cave twice, reject path
-            if this_conn in curr_path and this_conn.lower() == this_conn:
-                return
-            #-- end path, return completed path
-            if this_conn == "end":
-                curr_path.append(this_conn)
-                print(f'+++DEBUG: curr_path: {curr_path}')
-                return curr_path
-            print(f'+++DEBUG: adding this_conn: {this_conn}')
-            curr_path.append(this_conn)
-            next_conns.reverse()
-            print(f'+++DEBUG: next_conns: {next_conns}')
-            next_conns.pop()
-            print(f'+++DEBUG: next_conns after pop: {next_conns}')
-            
-            self.get_cave_path(curr_path)
-
-        print(f'+++DEBUG: bottom: {curr_path}')
-        return curr_path
-
-
-
-
     def build_cave_list(self, input_list=None):
         """ Take list of paths, build a list of cave objects """
         if input_list is None:
@@ -151,7 +88,6 @@ class Day12():
 
         for this_path in input_list:
             start_node, end_node = this_path.split('-')
-            print(f'+++DEBUG: start_node, end_node: {start_node}, {end_node}')
             #--start nodes
             cave_index = self.get_cave_index_by_name(start_node)
             if cave_index < 0:
@@ -168,6 +104,36 @@ class Day12():
 
         return self.cave_list
 
+    def build_cave_graph(self, input_list=None):
+        """ Converts a list of caves into a graph """
+        if input_list is None:
+            input_list = self.cave_list
+
+        cave_graph = {}
+
+        for cave in input_list:
+            cave_graph[cave.name] = cave.connects_to
+
+        return cave_graph
+
+    def recursive_path_finder(self,graph,cave,visited):
+        """ Recursively find paths in graph """
+        # solution cribbed from:
+        # https://github.com/tobstern/AOC_2021/blob/main/day12.py
+        # damn you, tricky recursion problems!
+        results = []
+        this_path = visited + [cave]
+        if cave == 'end':
+            return [this_path]
+
+        for this_cave in graph[cave]:
+            if this_cave != 'start':
+                if this_cave not in visited or this_cave.isupper():
+                    recurs_path = self.recursive_path_finder(graph, this_cave, this_path)
+                    results.extend(recurs_path)
+        return results
+
+
 
     def solve_part1(self):
         """
@@ -175,7 +141,12 @@ class Day12():
         small caves at most once?
         """
         part1_score = 0
-        self.build_cave_paths_pt1()
+        #--convert list of caves into a graph
+        cave_graph = self.build_cave_graph()
+
+        path_list = self.recursive_path_finder(cave_graph, 'start',[])
+        
+        part1_score = len(path_list)
 
         return part1_score
 

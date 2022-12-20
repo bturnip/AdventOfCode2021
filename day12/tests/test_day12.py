@@ -119,7 +119,6 @@ class TestDay12(TestCase):
         test100=Cave("sm")
         self.assertIsInstance(test100,Cave)
         self.assertEqual("sm",test100.name)
-        self.assertEqual("small",test100.cave_size)
 
         test_result = repr(test100)
         self.assertEqual("sm",test_result)
@@ -127,7 +126,6 @@ class TestDay12(TestCase):
         test101=Cave("XS")
         self.assertIsInstance(test101,Cave)
         self.assertEqual("XS",test101.name)
-        self.assertEqual("big",test101.cave_size)
 
         test102=Cave("foo")
         self.assertEqual("foo",test102.get_name())
