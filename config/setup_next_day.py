@@ -38,7 +38,6 @@ def set_next_day_number():
     target += 1
     return target
 
-
 def copy_templates (day_number,target_folder):
     """ Process TEMPLATE_DESTINATIONS """
     # template list entries look like:
@@ -67,15 +66,19 @@ def copy_templates (day_number,target_folder):
             t_file = str(this_template[2]).replace("{DAY_NUM}","day"+str(day_number))
             target_file = f'{t_folder}/{t_file}'
 
-            #-- check target, do not overwrite
-            if isfile(target_file):
-                print(f"+++WARNING: file already exists: {target_file}, skipping...")
-                break
+            file_in = open(src_file,"rt")
+            file_out = open(target_file,"wt")
 
-            # -- copy template files to target folder
-            print(f"\t- copying {os.path.basename(src_file)} " \
-                  f"---> {os.path.basename(target_file)}")
-            shutil.copy(src_file,target_file)
+            print(f"\t- populating {os.path.basename(target_file)} " )
+
+            for line in file_in:
+                file_out.write(line.replace("{DAY_NUM}","day"+str(target_day)) \
+                               .replace("{NUM}",str(target_day)) \
+                               .replace("{NEXT_DAY_NUM}","day"+str(target_day + 1))
+                       )
+            file_in.close()
+            file_out.close()
+
 
 # --program start-----------------------------------------------------
 
@@ -131,12 +134,12 @@ for this_dir in targets:
     except FileExistsError:
         pass
 
-
 # --------------------------------------------------------------------
 STEP="copy templates"
 print(f"+++INFO:{STEP}")
 # --------------------------------------------------------------------
 copy_templates(target_day,target_folder)
+
 
 # ready to rock and roll
 # --------------------------------------------------------------------

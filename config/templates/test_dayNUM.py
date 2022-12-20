@@ -38,14 +38,14 @@ class TestDay{NUM}(TestCase):
     def test_day{NUM}_object_creation(self):
         """ Test day{NUM} object creation"""
         test01=Day{NUM}()
-        self.assertIsInstance(test01,object)
+        self.assertIsInstance(test01,Day{NUM})
         #-------------------------------------
         test02=Day{NUM}(dummy_input_file)
-        self.assertIsInstance(test02,object)
+        self.assertIsInstance(test02,Day{NUM})
         self.assertEqual(dummy_input_file,test02.input_file)
         #-------------------------------------
         test03=Day{NUM}(sample_file)
-        self.assertIsInstance(test03,object)
+        self.assertIsInstance(test03,Day{NUM})
         # -------------------------------------     
 
 

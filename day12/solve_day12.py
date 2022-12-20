@@ -1,7 +1,7 @@
-""" Advent Of Code 2021 Day {NUM} driver """
+""" Advent Of Code 2021 Day 12 driver """
 import argparse
-from {DAY_NUM} import *
-from config_{DAY_NUM} import *
+from day12 import *
+from config_day12 import *
 
 #-- parse arguments
 parser = argparse.ArgumentParser()
@@ -26,15 +26,19 @@ else:
 
 print(f"+++INFO: using {this_file}...")
 
-
 # puzzle runner ----------------------------------
-print("+++INFO: starting puzzle...")
-puzzle = Day{NUM}(this_file)
+print("+++INFO: starting puzzle...\n")
+puzzle = Day12(this_file)
+
 
 print("+++INFO: solving part 1:")
 pt1= puzzle.solve_part1()
+print(f"+++INFO: part1: {pt1}")
+
 
 print("+++INFO: solving part 2:")
 pt2= puzzle.solve_part2()
+print(f"+++INFO: part1: {pt2}")
 
 print(f"+++INFO: full answer key:\n{puzzle.get_answer_key()}")
+
