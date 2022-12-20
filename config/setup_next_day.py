@@ -4,6 +4,7 @@
 # 20221126 Danny Anderson <bturnip@Heyday>
 # --------------------------------------------------------------------
 import os
+import argparse
 from os.path import basename, isfile
 import shutil
 from setup_config import *
@@ -81,6 +82,13 @@ def copy_templates (day_number,target_folder):
 
 
 # --program start-----------------------------------------------------
+#-- parse arguments
+parser = argparse.ArgumentParser()
+parser.add_argument("-nb", "--nobackup"\
+                    ,help = "skip the archive creation step" \
+                    , action = "store_true")
+
+args = parser.parse_args()
 
 # --------------------------------------------------------------------
 STEP="check paths imported from setup_config"
@@ -92,36 +100,36 @@ check_dir(ARCHIVE_DIR, "Archive storage")
 
 
 # --------------------------------------------------------------------
-STEP="get dir contents, set next day"
+STEP="set variables: target_day, target_folder"
 print(f"+++INFO:{STEP}")
 # --------------------------------------------------------------------
 target_day = set_next_day_number()
+target_folder = f'{BASEDIR}/day'+str(target_day)
 
 
 # --------------------------------------------------------------------
 STEP=f"archive entire AoC {YEAR} folder"
 print(f"+++INFO:{STEP}")
 # --------------------------------------------------------------------
-archive_name=f'{ARCHIVE_DIR}{AOC_VINTAGE}_day{target_day-1}'
-
-shutil.make_archive(archive_name, 'zip', BASEDIR)
-
-zipped_file = f'{archive_name}.zip'
-
-if not isfile(zipped_file):
-    print(f"+++ERROR: Did not find {basename(zipped_file)} in \n" \
-          f"+++ERROR: ARCHIVE_DIR: {ARCHIVE_DIR} \n" \
-          f"+++ERROR: Archive manually.")
+if args.nobackup:
+    print("\t - Archive step skipped by command argument")
 else:
-    print(f"+++INFO:{basename(zipped_file)} created...")
+    archive_name=f'{ARCHIVE_DIR}{AOC_VINTAGE}_day{target_day-1}'
+    shutil.make_archive(archive_name, 'zip', BASEDIR)
+    zipped_file = f'{archive_name}.zip'
+
+    if not isfile(zipped_file):
+        print(f"+++ERROR: Did not find {basename(zipped_file)} in \n" \
+              f"+++ERROR: ARCHIVE_DIR: {ARCHIVE_DIR} \n" \
+              f"+++ERROR: Archive manually.")
+    else:
+        print(f"+++INFO:{basename(zipped_file)} created...")
 
 
 # --------------------------------------------------------------------
-STEP="set target folder, create directory structure"
+STEP="create directory structure"
 print(f"+++INFO:{STEP}")
 # --------------------------------------------------------------------
-target_folder = f'{BASEDIR}/day'+str(target_day)
-
 print(f"+++INFO: Creating directories for Day{str(target_day)}...")
 targets = [target_folder
             ,f'{target_folder}/input_files'
