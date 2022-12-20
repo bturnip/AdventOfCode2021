@@ -27,7 +27,7 @@ class TestDay12(TestCase):
         # verified data
         sample_file_line_count = 7
         part1_sample_answer = 10
-        part2_sample_answer = 0
+        part2_sample_answer = 36
 
     def test_test(self):
         """ Dummy Test to test nosetests"""

@@ -2,6 +2,7 @@
 # suppress specific pylint checks (http://pylint-messages.wikidot.com/all-codes)
 # pylint: disable=R1721, C0103, C0123
 from os.path import isfile
+import numpy as np
 
 
 class Cave():
@@ -132,8 +133,33 @@ class Day12():
                     recurs_path = self.recursive_path_finder(graph, this_cave, this_path)
                     results.extend(recurs_path)
         return results
+        
+    def recursive_path_finder_pt2(self,graph,cave,visited):
+        """
+        Recursively find paths in graph
+        This versions allows a single small cave to be visited twice
+        """
+        results = []
+        this_path = visited + [cave]
+        if cave == 'end':
+            return [this_path]
 
+        for this_cave in graph[cave]:
+            if this_cave != 'start':
+                if ((this_cave not in visited or this_cave.isupper()) \
+                    or (this_cave.islower() \
+                        and self.num_sm_caves_visited_2x(this_path) == 0)):
+                    recurs_path = self.recursive_path_finder_pt2(graph, this_cave, this_path)
+                    results.extend(recurs_path)
+        return results
 
+    def num_sm_caves_visited_2x(self, curr_path):
+        """ Returns the number of small caves visted twice """
+        small_caves = [x for x in curr_path if x.islower()]
+        for c in small_caves:
+            if small_caves.count(c) > 1:
+                return 999
+        return 0
 
     def solve_part1(self):
         """
@@ -145,15 +171,17 @@ class Day12():
         cave_graph = self.build_cave_graph()
 
         path_list = self.recursive_path_finder(cave_graph, 'start',[])
-        
         part1_score = len(path_list)
-
         return part1_score
 
 
     def solve_part2(self):
         """ TODO: enter part 2 question here """
         part2_score = 0
+        cave_graph = self.build_cave_graph()
+        path_list2 = self.recursive_path_finder_pt2(cave_graph,'start',[])
+        part2_score = len(path_list2)
+
         return part2_score
 
 
