@@ -75,8 +75,10 @@ def copy_templates (day_number,target_folder):
             for line in file_in:
                 file_out.write(line.replace("{DAY_NUM}","day"+str(target_day)) \
                                .replace("{NUM}",str(target_day)) \
-                               .replace("{NEXT_DAY_NUM}","day"+str(target_day + 1))
-                       )
+                               .replace("{NEXT_DAY_NUM}","day"+str(target_day + 1))\
+                               .replace("{DAY_FOLDER}",target_folder) \
+                               .replace("{BASEDIR}",BASEDIR) 
+                              )
             file_in.close()
             file_out.close()
 
