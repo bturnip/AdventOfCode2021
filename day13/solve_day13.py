@@ -31,11 +31,14 @@ print(f"+++INFO: using {this_file}...")
 print("+++INFO: starting puzzle...")
 puzzle = Day13(this_file)
 
+print(f'+++DEBUG: whole_sheet.shape: {puzzle.whole_sheet.shape}')
 print("+++INFO: solving part 1:")
 pt1= puzzle.solve_part1()
-'''
+
 print("+++INFO: solving part 2:")
-pt2= puzzle.solve_part2()
-'''
+#--get a fresh object
+puzzle_pt2 = Day13(this_file)
+pt2= puzzle_pt2.solve_part2()
+
 print(f"+++INFO: full answer key:\n{puzzle.get_answer_key()}")
 

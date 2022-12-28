@@ -63,7 +63,17 @@ class Day13():
             if int(y) > max_y:
                 max_y = int(y)
 
-        max_min_data = {"x":max_x+1, "y":max_y+1}
+        #--sheet needs bounds that are odd for folding, therefore:
+        #  -if either boundary is even, add 1
+        max_x += 1
+        if max_x % 2 == 0:
+            max_x += 1
+
+        max_y += 1
+        if max_y %2 == 0:
+            max_y += 1
+
+        max_min_data = {"x":max_x, "y":max_y}
         return max_min_data
 
 
@@ -119,6 +129,7 @@ class Day13():
         # +---+---+---+---+---+
         # | 6 | 7 | 8 | 9 | 0 |
         # +---+---+---+---+---+
+        #--validate and set instructions
         instructions = []
         if type(fold_instruction) in (str,list):
             if len(fold_instruction) == 0:
@@ -132,9 +143,11 @@ class Day13():
             err_mssg = "+++ERROR: fold_instruction must be a str or list of strings"
             raise TypeError(err_mssg)
 
+        #--set up sheet to fold
         if self.folded_sheet.size == 0:
             self.folded_sheet = self.whole_sheet
 
+        #--process instructions
         for this_i in instructions:
             print(f'+++FOLDING: {this_i}')
 
@@ -152,8 +165,16 @@ class Day13():
                 fixed_portion = self.folded_sheet[:,0:idx]
                 folding_portion = np.fliplr(self.folded_sheet[:,idx+1:])
 
-            self.folded_sheet = fixed_portion + folding_portion
-            print(self.folded_sheet)
+            #-- if our portions are the same shape, we can just add
+            if fixed_portion.shape == folding_portion.shape:
+                self.folded_sheet = fixed_portion + folding_portion
+                #print(self.folded_sheet)
+            #-- TODO: add unlike shapes
+            else:
+                print(f'+++DEBUG: fixed shape:{fixed_portion.shape}'\
+                      f', folding shape{folding_portion.shape}')
+        print(f'+++INFO: final sheet:\n{self.folded_sheet}')
+
 
 
     def solve_part1(self):
@@ -168,7 +189,31 @@ class Day13():
         return part1_score
 
     def solve_part2(self):
-        """ TODO: enter part 2 question here """
+        """
+        Finish folding the transparent paper according to the
+        instructions. The manual says the code is always eight capital
+        letters.
+        What code do you use to activate the infrared thermal imaging
+        camera system?
+        """
+        #--follow all fold instructions
+        self.fold(self.fold_instructions)
+
+        #--convert sheet to blanks or "#" chars
+        arr = self.folded_sheet.astype(str)
+
+        np.place(arr, arr<'1', ' ')
+        np.place(arr,arr!=' ','#')
+        print(f'+++DEBUG: arr: \n{arr}')
+
+        #--write output file
+        file_out = "./part2_results.txt"
+        with open(file_out, "w",encoding="utf-8") as f:
+            content = str(arr)
+            f.write(content)
+
+        f.close()
+
         part2_score = 0
         return part2_score
 
