@@ -150,8 +150,8 @@ class Day13():
                 fixed_portion = self.folded_sheet[0:idx:]
                 folding_portion = np.flipud(self.folded_sheet[idx+1::])
             else:
-                fixed_portion = self.folded_sheet[:0:idx]
-                folding_portion = np.fliplr(self.folded_sheet[:idx+1:])
+                fixed_portion = self.folded_sheet[:,0:idx]
+                folding_portion = np.fliplr(self.folded_sheet[:,idx+1:])
 
             self.folded_sheet = fixed_portion + folding_portion
             print(f'+++DEBUG: self.folded_sheet:\n {self.folded_sheet}')
