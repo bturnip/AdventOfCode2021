@@ -23,8 +23,7 @@ class TestDay13(TestCase):
         sample_file = SAMPLE_FILE
 
         # verified data
-        sample_file_line_count = 0 #TODO
-        part1_sample_answer = 0 #TODO
+        part1_sample_answer = 17
         part2_sample_answer = 0 #TODO
         sample_fold_instructions = ['y=7','x=5']
         sample_sheet_shape = (15,11)
@@ -81,10 +80,13 @@ class TestDay13(TestCase):
             x,y = sample_sheet_starting_coords[rand_idx].split(',')
             rand_coord =(int(y),int(x))
             self.assertEqual(1,test20.whole_sheet[rand_coord])
+            
+        test21 = Day13()
+        self.assertRaises(TypeError,test21.load_whole_sheet_from_file,dummy_input_file)
         
 
-    def test_fold_horizontal(self):
-        """ Testing folding on the y axis """
+    def test_folding_01(self):
+        """ Testing y-axis folding, testing w/ bad instructions """
         test30 = Day13(SAMPLE_FILE)
         fold_instruction = 'y=7'
         test30.fold(fold_instruction)
@@ -92,7 +94,22 @@ class TestDay13(TestCase):
         self.assertEqual(expected_shape,test30.folded_sheet.shape)
         
         test31 = Day13(SAMPLE_FILE)
-        self.assertRaises(TypeError,test31.fold(7))
+        self.assertRaises(TypeError,test31.fold,7)
+        
+        test32 = Day13(SAMPLE_FILE)
+        self.assertRaises(ValueError,test32.fold,'')
+        self.assertRaises(ValueError,test32.fold,[])
+    
+    def test_folding_02(self):
+        """ Testing with multiple instructions """
+        test32 = Day13(SAMPLE_FILE)
+        test32.fold(sample_fold_instructions)
+        expected_shape = (7,5)
+        self.assertEqual(expected_shape,test32.folded_sheet.shape)
+        
+        test32.fold('x=2')
+        expected_shape = (7,2)
+        self.assertEqual(expected_shape,test32.folded_sheet.shape)
         
     def test_get_answer_key(self):
         """ Testing get_answer_key() """

@@ -41,11 +41,9 @@ class Day13():
                         if line.startswith('f')]
 
         input_stream.close()
-
         self.fold_instructions = raw_data
-
-
         return raw_data
+
 
     def get_sheet_bounds(self, input_file):
         """ determine the max grid size needed in input file """
@@ -57,8 +55,6 @@ class Day13():
                         for line in input_stream
                         if line[0].isdigit()]
         input_stream.close()
-
-        print(f'+++DEBUG: raw_data: {raw_data}')
 
         for this_coord in raw_data:
             x, y = this_coord.split(',')
@@ -124,11 +120,14 @@ class Day13():
         # | 6 | 7 | 8 | 9 | 0 |
         # +---+---+---+---+---+
         instructions = []
-        if len(fold_instruction) == 0:
-            err_mssg = "+++ERROR: must have non-empty fold instructions, nothing to do"
-            raise ValueError(err_mssg)
         if type(fold_instruction) in (str,list):
-            instructions = fold_instruction
+            if len(fold_instruction) == 0:
+                err_mssg = "+++ERROR: must have non-empty fold instructions, nothing to do"
+                raise ValueError(err_mssg)
+            if type(fold_instruction) == str:
+                instructions.append(fold_instruction)
+            elif type(fold_instruction) == list:
+                instructions.extend(fold_instruction)
         else:
             err_mssg = "+++ERROR: fold_instruction must be a str or list of strings"
             raise TypeError(err_mssg)
@@ -137,7 +136,7 @@ class Day13():
             self.folded_sheet = self.whole_sheet
 
         for this_i in instructions:
-            print(f'+++DEBUG: this instruction: {this_i}')
+            print(f'+++FOLDING: {this_i}')
 
             axis, idx = this_i.split('=')
             idx = int(idx)
@@ -154,14 +153,18 @@ class Day13():
                 folding_portion = np.fliplr(self.folded_sheet[:,idx+1:])
 
             self.folded_sheet = fixed_portion + folding_portion
-            print(f'+++DEBUG: self.folded_sheet:\n {self.folded_sheet}')
-
-        
+            print(self.folded_sheet)
 
 
     def solve_part1(self):
-        """ TODO: enter part 1 question here """
+        """
+        How many dots are visible after completing just the first
+        fold instruction on your transparent paper?
+        """
         part1_score = 0
+        self.fold(self.fold_instructions[0])
+        part1_score = np.count_nonzero(self.folded_sheet > 0)
+        self.answer_key["part1"] = part1_score
         return part1_score
 
     def solve_part2(self):
