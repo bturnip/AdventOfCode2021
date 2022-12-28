@@ -19,6 +19,6 @@ TEMPLATE_LIST = [
     ,['requirements_dayNUM.txt','{BASEDIR}','requirements_{DAY_NUM}.txt']
     ,['test_dayNUM.py','{DAY_FOLDER}/tests','test_{DAY_NUM}.py']
     ,['dayNUM.yml','{BASEDIR}/.github/workflows','run_{DAY_NUM}.yml']
-    ,['git_commands_dayNUM.py','{DAY_FOLDER}','git_commands_{DAY_NUM}.py']
+    ,['git_commands_dayNUM','{DAY_FOLDER}','git_commands_{DAY_NUM}']
     ]
 
