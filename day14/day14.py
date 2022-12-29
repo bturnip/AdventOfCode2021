@@ -14,7 +14,6 @@ class Day14():
         self.insertion_rules = {}
         self.polymer = ''
 
-
         if input_file is not None and isfile(input_file):
             self.load_data_from_file(input_file)
 
@@ -42,6 +41,30 @@ class Day14():
         for r in rules:
             data = r.split(' -> ')
             self.insertion_rules[data[0]] = data[1].rstrip()
+
+
+    def process_polymer(self,num_steps=10):
+        """         expands polymner using the insertion rules """
+
+        if self.polymer == '':
+            p = self.polymer_template
+        else:
+            p = self.polymer
+        
+        for s in range(num_steps):
+            new_p = ''
+            #--build the pairs to process in this step
+            polymer_pairs = []
+            for r in range(0,len(p)-1):
+                polymer_pairs.append(f'{p[r]}{p[r+1]}')
+            #--process the pairs
+            for pair in polymer_pairs:
+                new_p +=  f'{pair[0]}{self.insertion_rules[pair]}'
+            #--add the last element back to the chain
+            new_p += polymer_pairs[-1][1]
+           
+        #--polymerization complete
+        self.polymer = new_p
 
 
 

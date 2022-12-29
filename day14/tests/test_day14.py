@@ -65,6 +65,21 @@ class TestDay14(TestCase):
         #--test a random dict values
         key,val = random.choice(list(test11.insertion_rules.items()))
         self.assertEqual(test11.insertion_rules[key],val)
+    
+    def test_process_polymer(self):
+        """ Testing process_polymer()"""
+        test20 = Day14(SAMPLE_FILE)
+        step1_polymer = "NCNBCHB"
+        #--run 1 step of polymerization
+        test20.process_polymer(1)
+        self.assertEqual(step1_polymer,test20.polymer)
+        
+        test21 = Day14(SAMPLE_FILE)
+        step4_polymer="NBBNBNBBCCNBCNCCNBBNBBNBBBNBBNBBCBHCBHHNHCBBCBHCB"
+        #--run 4 steps of polymerization
+        test21.process_polymer(4)
+        self.assertEqual(step1_polymer,test21.polymer)
+        
 
 
     @skip("Skipping answer testing")

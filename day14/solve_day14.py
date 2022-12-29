@@ -31,9 +31,7 @@ print(f"+++INFO: using {this_file}...")
 print("+++INFO: starting puzzle...")
 puzzle = Day14(this_file)
 
-import random
-key,val = random.choice(list(puzzle.insertion_rules.items()))
-print(f'+++DEBUG: key,val: {key},{val}')
+puzzle.process_polymer(1)
 
 
 print("+++INFO: solving part 1:")
