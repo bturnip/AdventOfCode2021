@@ -55,8 +55,6 @@ class TestDay{NUM}(TestCase):
         self.assertRaises(TypeError,test10.load_data_from_file,dummy_input_file)
 
 
-
-
     #@skip("Skipping answer testing")
     def test_get_answer_key(self):
         """ Testing get_answer_key() """
