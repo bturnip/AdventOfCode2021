@@ -10,6 +10,8 @@ git add {DAY_FOLDER}/setup.cfg
 git add {DAY_FOLDER}/tests/test_{DAY_NUM}.py
 git add {DAY_FOLDER}/*.py
 
+# this will fail if run before files have been retrieved from AoC
+# this will not stop the script from running
 git add -f {DAY_FOLDER}/input_files/*.txt
 
 git commit -am"{DAY_NUM}: initial commit of auto-generated templates"

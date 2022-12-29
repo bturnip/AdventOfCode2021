@@ -1,0 +1,21 @@
+#!/bin/bash
+# confirm correct day is current branch?
+# from day14 folder:
+git checkout -b day14
+
+git add /home/bturnip/Documents/Code/python/advent_of_code/AdventOfCode2021/.github/workflows/run_day14.yml 
+git add /home/bturnip/Documents/Code/python/advent_of_code/AdventOfCode2021/requirements_day14.txt 
+git add /home/bturnip/Documents/Code/python/advent_of_code/AdventOfCode2021/day14/setup.cfg
+
+git add /home/bturnip/Documents/Code/python/advent_of_code/AdventOfCode2021/day14/tests/test_day14.py
+git add /home/bturnip/Documents/Code/python/advent_of_code/AdventOfCode2021/day14/*.py
+
+git add -f /home/bturnip/Documents/Code/python/advent_of_code/AdventOfCode2021/day14/input_files/*.txt
+
+git commit -am"day14: initial commit of auto-generated templates"
+git push -u origin day14
+
+
+
+
+
