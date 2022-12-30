@@ -98,7 +98,7 @@ class TestDay14(TestCase):
         
 
 
-    #@skip("Skipping answer testing")
+    @skip("Skipping answer testing")
     def test_get_answer_key(self):
         """ Testing get_answer_key() """
         test90 = Day14()
