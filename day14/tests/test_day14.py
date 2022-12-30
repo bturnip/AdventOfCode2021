@@ -28,7 +28,7 @@ class TestDay14(TestCase):
                         ,'BB': 'N', 'BC': 'B', 'CC': 'N', 'CN': 'C'}
 
         part1_sample_answer = 1588
-        part2_sample_answer = 0
+        part2_sample_answer = 2188189693529
 
     def test_test(self):
         """ Dummy Test to test nosetests"""
@@ -68,21 +68,37 @@ class TestDay14(TestCase):
     
     def test_process_polymer(self):
         """ Testing process_polymer()"""
-        test20 = Day14(SAMPLE_FILE)
+        print("+++TEST 21")
+        test21 = Day14(SAMPLE_FILE)
         step1_polymer = "NCNBCHB"
         #--run 1 step of polymerization
-        test20.process_polymer(1)
-        self.assertEqual(step1_polymer,test20.polymer)
-        
-        test21 = Day14(SAMPLE_FILE)
-        step4_polymer="NBBNBNBBCCNBCNCCNBBNBBNBBBNBBNBBCBHCBHHNHCBBCBHCB"
-        #--run 4 steps of polymerization
-        test21.process_polymer(4)
+        test21.run_polymerization_chain()
         self.assertEqual(step1_polymer,test21.polymer)
         
+        print("+++TEST 22")
+        test22 = Day14(SAMPLE_FILE)
+        step2_polymer = "NBCCNBBBCBHCB"
+        #--run 2 steps of polymerization
+        test22.run_polymerization_chain(2)
+        self.assertEqual(step2_polymer,test22.polymer)
+        
+        print("+++TEST 23")
+        test23 = Day14(SAMPLE_FILE)
+        step3_polymer = "NBBBCNCCNBBNBNBBCHBHHBCHB"
+        #--run 3 steps of polymerization
+        test23.run_polymerization_chain(3)
+        self.assertEqual(step3_polymer,test23.polymer)
+        
+        print("+++TEST 24")
+        test24 = Day14(SAMPLE_FILE)
+        step4_polymer="NBBNBNBBCCNBCNCCNBBNBBNBBBNBBNBBCBHCBHHNHCBBCBHCB"
+        #--run 4 steps of polymerization
+        test24.run_polymerization_chain(4)
+        self.assertEqual(step4_polymer,test24.polymer)
+        
 
 
-    @skip("Skipping answer testing")
+    #@skip("Skipping answer testing")
     def test_get_answer_key(self):
         """ Testing get_answer_key() """
         test90 = Day14()

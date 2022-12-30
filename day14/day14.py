@@ -34,52 +34,100 @@ class Day14():
         with open(input_file,'r',encoding="utf-8") as input_stream:
             raw_data=input_stream.readlines()
         input_stream.close()
-        
+
         self.polymer_template = raw_data[0].rstrip()
-        
+
         rules = raw_data[2:]
         for r in rules:
             data = r.split(' -> ')
             self.insertion_rules[data[0]] = data[1].rstrip()
 
 
-    def process_polymer(self,num_steps=10):
-        """         expands polymner using the insertion rules """
+    def run_polymerization_chain (self,num_cycles=1):
+        """ Calls the process_polymer function num_cycles times """
+        for i in range(num_cycles):
+            p = self.process_polymer()
 
-        if self.polymer == '':
-            p = self.polymer_template
+
+    def process_polymer(self, input_polymer=None):
+        """ expands polymner using the insertion rules """
+
+        if input_polymer is None:
+            update_instance_polymer = True
+            if self.polymer == '':
+                p = self.polymer_template
+            else:
+                p = self.polymer
         else:
-            p = self.polymer
-        
-        for s in range(num_steps):
-            new_p = ''
-            #--build the pairs to process in this step
-            polymer_pairs = []
-            for r in range(0,len(p)-1):
-                polymer_pairs.append(f'{p[r]}{p[r+1]}')
-            #--process the pairs
-            for pair in polymer_pairs:
-                new_p +=  f'{pair[0]}{self.insertion_rules[pair]}'
-            #--add the last element back to the chain
-            new_p += polymer_pairs[-1][1]
-           
-        #--polymerization complete
-        self.polymer = new_p
+            p=input_polymer
 
+        #--build the pairs to process in this step
+        polymer_pairs = []
+        for r in range(0,len(p)-1):
+            polymer_pairs.append(f'{p[r]}{p[r+1]}')
 
+        #--process the pairs
+        new_p = ''
+        for pair in polymer_pairs:
+            new_p +=  f'{pair[0]}{self.insertion_rules[pair]}'
+        #--add the last element back to the chain
+        new_p += polymer_pairs[-1][1]
+
+        #--update self.polymer if no input was given
+        if update_instance_polymer:
+            self.polymer = new_p
+        return new_p
 
     def solve_part1(self):
-        """ TODO: enter part 1 question here """
-        part1_score = 0
+        """
+        What do you get if you take the quantity of the most common
+        element and subtract the quantity of the least common element?
+        """
+        #--reset any polymerization
+        self.polymer=''
+        self.run_polymerization_chain(10)
+
+        x=np.array(list(self.polymer))
+        unique,frequency = np.unique(x, return_counts = True)
+
+        frequency.sort()
+        part1_score = frequency[-1] - frequency[0]
+
+        # ~ z=zip(unique,frequency)
+        # ~ foo = {key: value for key, value in z}
+        # ~ print(f'+++DEBUG: foo: {foo}')
+        # ~ print(f'+++DEBUG: frequency: {frequency}')
+        
+        self.answer_key['part1'] = part1_score
+
         return part1_score
 
     def solve_part2(self):
         """ TODO: enter part 2 question here """
-        part2_score = 0
+        """
+        What do you get if you take the quantity of the most common
+        element and subtract the quantity of the least common element?
+        Run 40x instead of 10
+        """
+        #--reset any polymerization
+        self.polymer=''
+        self.run_polymerization_chain(40)
+
+        x=np.array(list(self.polymer))
+        unique,frequency = np.unique(x, return_counts = True)
+
+        frequency.sort()
+        part1_score = frequency[-1] - frequency[0]
+
+        # ~ z=zip(unique,frequency)
+        # ~ foo = {key: value for key, value in z}
+        # ~ print(f'+++DEBUG: foo: {foo}')
+        # ~ print(f'+++DEBUG: frequency: {frequency}')
+        
+        self.answer_key['part2'] = part2_score
+
         return part2_score
 
     def get_answer_key(self):
         """ return answer key"""
         return self.answer_key
-
-
