@@ -39,10 +39,10 @@ DEV STEPS: Steps, using {DAY_NUM} as example:
     05b: AoC_data:
             file: input/input.txt
             file: <sample files as needed>
-    06: get branch initialized and push
-        code: git add file1 dir2/file2 
-        code: git commit -m "{DAY_NUM}: initial commit"
-        code: git push -u origin {DAY_NUM} 
+    06: [SCRIPTED]get branch initialized and push
+            code: git add file1 dir2/file2 
+            code: git commit -m "{DAY_NUM}: initial commit"
+            code: git push -u origin {DAY_NUM} 
             NB: this is only need the first time
     08: get Github Actions working:
         write the minimal code to get a successful github action build
